@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrushPass — Middleton Painting</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --color-background-primary:#ffffff;--color-background-secondary:#f8f7f4;--color-background-tertiary:#f0ede8;
+  --color-text-primary:#1a1a18;--color-text-secondary:#6b6a65;
+  --color-border-tertiary:rgba(0,0,0,0.08);--color-border-secondary:rgba(0,0,0,0.15);
+  --border-radius-md:8px;--border-radius-lg:12px;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+@media(prefers-color-scheme:dark){:root{
+  --color-background-primary:#1c1c1a;--color-background-secondary:#242422;--color-background-tertiary:#2a2a28;
+  --color-text-primary:#f0ede8;--color-text-secondary:#9a9890;
+  --color-border-tertiary:rgba(255,255,255,0.08);--color-border-secondary:rgba(255,255,255,0.15)
+}}
+body{font-family:var(--font-sans);background:#0f1923;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;gap:12px}
+.page-header{color:#fff;font-size:13px;opacity:.6;font-weight:400}
+.page-header span{color:#E87722;font-weight:500;opacity:1}
+</style>
+</head>
+<body>
+<div class="page-header">Brush<span>Pass</span> &nbsp;·&nbsp; Demo build &nbsp;·&nbsp; Middleton Painting</div>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.shell{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary);height:700px;display:flex;flex-direction:column}
+.topbar{background:#1B3A6B;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.logo{color:#fff;font-weight:500;font-size:15px}.logo span{color:#E87722}
+.vtoggle{display:flex;background:rgba(255,255,255,0.12);border-radius:20px;padding:3px;gap:2px}
+.vbtn{padding:4px 11px;border:none;background:transparent;border-radius:14px;font-size:11px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.6)}
+.vbtn.on{background:#E87722;color:#fff}
+.av{width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#1B3A6B}
+.crew-strip{background:rgba(232,119,34,0.15);border-bottom:2px solid #E87722;padding:4px 14px;font-size:11px;color:#E87722;font-weight:500;display:none;align-items:center;gap:5px;flex-shrink:0}
+.view-caption{background:var(--color-background-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);padding:6px 14px;font-size:11px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;flex-shrink:0;line-height:1.4}
+.view-caption i{color:#E87722;font-size:13px;flex-shrink:0}
+.view-caption strong{color:var(--color-text-primary);font-weight:600}
+.navrow{display:flex;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);overflow-x:auto;flex-shrink:0}
+.ntab{padding:9px 13px;font-size:12px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.ntab.on{color:#1B3A6B;border-bottom-color:#E87722;font-weight:500}
+.nbadge{background:#E87722;color:#fff;font-size:10px;padding:1px 5px;border-radius:10px}
+.main{flex:1;overflow:hidden}
+.tag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
+.tag-ext{background:#D9E8F5;color:#1B3A6B}.tag-int{background:#E6F3E6;color:#2a6b2a}.tag-deck{background:#FDF0E0;color:#854F0B}.tag-cab{background:#EDE8F5;color:#5B3A9B}.tag-open{background:#EAF3DE;color:#3B6D11}.tag-grabbed{background:#FDF0E0;color:#854F0B}.tag-awarded{background:#FBEAF0;color:#993356}.tag-done{background:#E6F3E6;color:#2a6b2a}
+.jobs{display:grid;grid-template-columns:1fr 300px;height:100%;overflow:hidden}
+.jleft{display:flex;flex-direction:column;overflow:hidden}
+.jtoolbar{padding:8px 12px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;gap:7px;flex-wrap:wrap;background:var(--color-background-secondary);flex-shrink:0}
+.jsearch{flex:2;min-width:120px;font-size:13px;padding:7px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);height:34px}
+.jsel{font-size:12px;padding:5px 8px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);height:34px}
+.postbtn{background:#E87722;color:#fff;border:none;padding:0 12px;height:34px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.jlist{overflow-y:auto;padding:10px;flex:1}
+.jcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;margin-bottom:8px;cursor:pointer;overflow:hidden;display:grid;grid-template-columns:72px 1fr}
+.jcard:hover{border-color:#888}.jcard.sel{border-color:#1B3A6B;border-width:1.5px;background:var(--color-background-secondary)}
+.jcard.mine{border-color:#E87722;border-width:1.5px}
+.jthumb{width:72px;min-height:80px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.jinfo{padding:10px 11px}
+.jtop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px}
+.jtitle{font-size:12px;font-weight:500;color:var(--color-text-primary);line-height:1.3;flex:1;margin-right:6px}
+.jprice{font-size:12px;font-weight:500;color:#1B3A6B;white-space:nowrap}
+.jmeta{font-size:10px;color:var(--color-text-secondary);margin-bottom:4px}
+.jtags{display:flex;gap:4px;flex-wrap:wrap}
+.jfoot{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--color-text-secondary)}
+.jside{border-left:0.5px solid var(--color-border-tertiary);overflow-y:auto;background:var(--color-background-secondary)}
+.jempty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--color-text-secondary);font-size:12px;gap:6px;text-align:center;padding:16px}
+.dp-hero{width:100%;height:120px;object-fit:cover}
+.dp-nophoto{height:60px;background:var(--color-background-tertiary);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--color-text-secondary);gap:5px;cursor:pointer}
+.dp-strip{display:flex;gap:5px;padding:7px 11px;overflow-x:auto;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.sp-item{position:relative;flex-shrink:0}
+.sp-item img{width:42px;height:42px;object-fit:cover;border-radius:5px;border:1.5px solid transparent;cursor:pointer}
+.sp-item img.sel{border-color:#1B3A6B}
+.sp-del{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:#A32D2D;border-radius:50%;border:none;color:#fff;font-size:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sp-add{width:42px;height:42px;border-radius:5px;border:1.5px dashed var(--color-border-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--color-text-secondary);font-size:14px}
+.dpb{padding:11px 12px}
+.dp-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:1px}
+.dp-price{font-size:17px;font-weight:500;color:#1B3A6B;margin-bottom:2px}
+.dp-meta{font-size:11px;color:var(--color-text-secondary);margin-bottom:8px}
+.dtabs{display:flex;gap:2px;margin-bottom:8px;overflow-x:auto}
+.dtab{font-size:11px;padding:4px 9px;border-radius:20px;cursor:pointer;border:0.5px solid transparent;color:var(--color-text-secondary);white-space:nowrap;flex-shrink:0}
+.dtab.on{background:#1B3A6B;color:#fff}
+.dpl{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.sli{font-size:11px;color:var(--color-text-secondary);line-height:1.6;padding-left:12px}
+.sli li{margin-bottom:2px}
+.sm2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.sc{background:var(--color-background-secondary);border-radius:6px;padding:8px}
+.sc .sl{font-size:10px;color:var(--color-text-secondary);margin-bottom:1px}
+.sc .sv{font-size:13px;font-weight:500}
+.frow{display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;margin-bottom:5px}
+.ficon{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.lrow{display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;margin-bottom:5px}
+.uzone{border:1.5px dashed var(--color-border-secondary);border-radius:6px;padding:10px;text-align:center;cursor:pointer;color:var(--color-text-secondary);font-size:11px;margin-top:5px}
+.uzone:hover{background:var(--color-background-secondary)}
+.ladd{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:5px}
+.ladd input{font-size:11px;padding:5px 7px;border-radius:5px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)}
+.ladd-btn{grid-column:1/-1;background:#1B3A6B;color:#fff;border:none;padding:6px;border-radius:5px;font-size:11px;cursor:pointer}
+.wo-box{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:11px}
+.wo-top{display:flex;gap:9px;align-items:center;margin-bottom:9px}
+.wo-icon{width:34px;height:34px;background:#FCEBEB;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.wo-acts{display:flex;gap:5px;flex-wrap:wrap}
+.wo-btn{flex:1;min-width:50px;padding:5px;border:0.5px solid var(--color-border-secondary);border-radius:5px;font-size:10px;cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-primary);display:flex;align-items:center;justify-content:center;gap:3px}
+.wo-btn.r{border-color:#1B3A6B;color:#1B3A6B}.wo-btn.d{border-color:#A32D2D;color:#A32D2D}
+.pbtn{width:100%;background:#1B3A6B;color:#fff;border:none;padding:9px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px}
+.obtn{width:100%;background:#E87722;color:#fff;border:none;padding:9px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px}
+.gbtn{width:100%;background:#2a6b2a;color:#fff;border:none;padding:10px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px}
+.sban{background:#E6F3E6;border-radius:6px;padding:8px;text-align:center;margin-top:6px}
+.sban i{font-size:17px;color:#2a6b2a;display:block;margin-bottom:3px}
+.sban p{font-size:11px;color:#2a6b2a;font-weight:500}
+.payout-bar{background:#1B3A6B;padding:8px 11px;display:flex;gap:8px;align-items:center}
+.payout-bar i{color:#E87722;font-size:15px}
+.payout-bar div{color:#fff;font-size:11px;line-height:1.4}
+.payout-bar strong{font-size:12px;display:block}
+.grab-banner{background:#2a6b2a;padding:10px 12px;text-align:center}
+.grab-banner .gb-t{color:#fff;font-size:13px;font-weight:500;margin-bottom:1px}
+.grab-banner .gb-s{color:rgba(255,255,255,0.7);font-size:11px}
+.grabbed-banner{background:#E87722;padding:10px 12px;text-align:center}
+.grabbed-banner .gt{color:#fff;font-size:12px;font-weight:500;margin-bottom:1px}
+.grabbed-banner .gs{color:rgba(255,255,255,0.8);font-size:11px}
+.star-row{display:flex;gap:3px;margin-bottom:6px}
+.star{font-size:16px;cursor:pointer;color:var(--color-text-secondary)}
+.star.on{color:#E87722}
+.review-box{background:var(--color-background-secondary);border-radius:8px;padding:12px;margin-top:8px;border:0.5px solid var(--color-border-tertiary)}
+.crew-stars{display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;margin-bottom:6px}
+.star-display{color:#E87722;font-size:13px;letter-spacing:1px}
+.evpanel,.nfpanel,.ratepanel{overflow-y:auto;padding:13px;height:100%}
+.evcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:13px;margin-bottom:10px}
+.evtop{display:flex;gap:11px;margin-bottom:9px}
+.evdate{border-radius:6px;padding:6px 9px;text-align:center;flex-shrink:0;min-width:44px;color:#fff}
+.evdate .em{font-size:9px;text-transform:uppercase;letter-spacing:.5px;opacity:.8}
+.evdate .ed{font-size:20px;font-weight:500;line-height:1}
+.evtag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;background:#D9E8F5;color:#1B3A6B;display:inline-block;margin-left:5px}
+.evtag.social{background:#FDF0E0;color:#854F0B}
+.evbody{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:9px}
+.evrsvp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.rbtn{padding:5px 11px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)}
+.rbtn.going{background:#E87722;color:#fff;border-color:#E87722}
+.rbtn.maybe-on{background:#1B3A6B;color:#fff;border-color:#1B3A6B}
+.nfitem{display:flex;gap:9px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.nfitem:last-child{border:none}
+.nficon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.nfdot{width:7px;height:7px;background:#E87722;border-radius:50%;flex-shrink:0;margin-top:4px}
+.rgroup{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:12px;margin-bottom:10px}
+.rgroup h4{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.rrow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.rlabel{font-size:11px;color:var(--color-text-secondary);flex:1}
+.rinput{width:75px;font-size:12px;padding:5px 7px;border-radius:5px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);text-align:right}
+.runit{font-size:10px;color:var(--color-text-secondary);width:50px;text-align:right;flex-shrink:0}
+.roadmap-panel{overflow-y:auto;padding:13px;height:100%}
+.rm-section{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:13px;margin-bottom:10px}
+.rm-section h4{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.rm-items{display:flex;flex-direction:column;gap:7px}
+.rm-item{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;background:var(--color-background-secondary);border-radius:7px}
+.rm-status{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:500;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.rm-built{background:#E6F3E6;color:#27500A}
+.rm-next{background:#D9E8F5;color:#0C447C}
+.rm-later{background:#F1EFE8;color:#444441}
+.rm-idea{background:#EDE8F5;color:#3C3489}
+.rm-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.rm-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.tier-card{border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:11px;margin-bottom:8px;background:var(--color-background-primary)}
+.tier-card.featured{border-color:#E87722;border-width:1.5px}
+.tier-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.tier-price{font-size:18px;font-weight:500;color:#1B3A6B;margin-bottom:6px}
+.tier-price span{font-size:11px;font-weight:400;color:var(--color-text-secondary)}
+.tier-features{font-size:11px;color:var(--color-text-secondary);line-height:1.7}
+.cqpanel{overflow-y:auto;height:100%}
+.cqinner{padding:14px;max-width:460px;margin:0 auto}
+.sbar{display:flex;margin-bottom:16px;border-radius:6px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.sdot{flex:1;padding:6px 2px;text-align:center;font-size:10px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary)}
+.sdot:last-child{border-right:none}
+.sdot.act{background:#1B3A6B;color:#fff;font-weight:500}
+.sdot.done{background:#E87722;color:#fff}
+.sh{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.ss{font-size:12px;color:var(--color-text-secondary);margin-bottom:14px;line-height:1.5}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.tc{border:1.5px solid var(--color-border-tertiary);border-radius:9px;padding:13px 8px;text-align:center;cursor:pointer;background:var(--color-background-primary)}
+.tc:hover{border-color:#1B3A6B}
+.tc.sel{border-color:#1B3A6B;border-width:2px;background:#E6F1FB}
+.tc i{font-size:24px;color:var(--color-text-secondary);display:block;margin-bottom:5px}
+.tc.sel i{color:#1B3A6B}
+.tc .tl{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.tc .ts{font-size:10px;color:var(--color-text-secondary);margin-top:1px}
+.ext-card{background:#1B3A6B;border-radius:11px;padding:20px;text-align:center;margin-bottom:13px}
+.ext-card i{font-size:36px;color:#E87722;display:block;margin-bottom:9px}
+.ext-card h3{font-size:15px;font-weight:500;color:#fff;margin-bottom:6px}
+.ext-card p{font-size:12px;color:rgba(255,255,255,0.72);line-height:1.6;margin-bottom:13px}
+.ext-card a{display:inline-flex;align-items:center;gap:6px;background:#E87722;color:#fff;text-decoration:none;padding:10px 20px;border-radius:7px;font-size:13px;font-weight:500}
+.ext-or{color:rgba(255,255,255,0.4);font-size:11px;margin:10px 0}
+.ext-phone{color:#fff;font-size:15px;font-weight:500}
+.fg{margin-bottom:11px}
+.fl{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;display:block}
+.fl-sub{font-size:10px;color:var(--color-text-secondary);font-weight:400;margin-left:4px}
+.fi{width:100%;font-size:13px;padding:8px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
+.d3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.d3 input{font-size:12px;padding:8px 6px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);width:100%;text-align:center}
+.dlbl{font-size:10px;color:var(--color-text-secondary);text-align:center;margin-top:2px}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.sitem{border:0.5px solid var(--color-border-tertiary);border-radius:6px;overflow:hidden;cursor:pointer;background:var(--color-background-primary)}
+.sitem.on{border-color:#1B3A6B;background:#E6F1FB}
+.stop{display:flex;align-items:center;gap:6px;padding:7px 9px}
+.stop i{font-size:13px;color:var(--color-text-secondary)}
+.sitem.on .stop i{color:#1B3A6B}
+.slbl{font-size:11px;color:var(--color-text-primary)}
+.ccoat{display:flex;border-top:0.5px solid var(--color-border-tertiary)}
+.copt{flex:1;padding:4px 3px;text-align:center;font-size:10px;color:var(--color-text-secondary);cursor:pointer;border-right:0.5px solid var(--color-border-tertiary)}
+.copt:last-child{border-right:none}
+.copt.c1{background:#1B3A6B;color:#fff;font-weight:500}
+.copt.c2{background:#E87722;color:#fff;font-weight:500}
+.tog2{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:4px}
+.tg{padding:7px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;text-align:center;cursor:pointer;font-size:11px;color:var(--color-text-secondary);background:var(--color-background-primary)}
+.tg:hover{border-color:#1B3A6B}
+.tg.sel{background:#1B3A6B;color:#fff;border-color:#1B3A6B;font-weight:500}
+.tg.sel-o{background:#E87722;color:#fff;border-color:#E87722;font-weight:500}
+.rctr{display:flex;align-items:center;gap:9px;margin-bottom:11px}
+.rcbtn{width:28px;height:28px;border:0.5px solid var(--color-border-secondary);border-radius:5px;background:var(--color-background-secondary);font-size:15px;cursor:pointer;color:var(--color-text-primary);display:flex;align-items:center;justify-content:center}
+.rblk{background:var(--color-background-secondary);border-radius:9px;padding:11px;margin-bottom:9px;border:0.5px solid var(--color-border-tertiary)}
+.rblkh{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.phgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:7px}
+.phitem{position:relative}
+.phitem img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:5px}
+.phdel{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:#A32D2D;border-radius:50%;border:none;color:#fff;font-size:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qbox{background:#1B3A6B;border-radius:11px;padding:16px;margin-bottom:11px;text-align:center;color:#fff}
+.qprice{font-size:36px;font-weight:500;color:#E87722;line-height:1}
+.qrange{font-size:11px;opacity:.7;margin-top:2px}
+.qsub{font-size:10px;opacity:.6;margin-top:7px;line-height:1.5}
+.qbrk{background:var(--color-background-secondary);border-radius:6px;padding:11px;margin-bottom:11px}
+.qbrow{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.qbrow:last-child{border:none;font-weight:500;padding-top:5px}
+.qbrow .qk{color:var(--color-text-secondary)}
+.disc{background:#FDF0E0;border-radius:7px;padding:10px 12px;font-size:11px;color:#633806;line-height:1.6;margin-bottom:11px;border:1.5px solid #E8C98A;display:flex;gap:7px;align-items:flex-start}
+.disc i{font-size:14px;color:#E87722;flex-shrink:0;margin-top:1px}
+.cant{background:#1B3A6B;border-radius:11px;padding:20px;text-align:center;margin-bottom:13px}
+.cant i{font-size:36px;color:#E87722;display:block;margin-bottom:9px}
+.cant h3{font-size:15px;font-weight:500;color:#fff;margin-bottom:6px}
+.cant p{font-size:12px;color:rgba(255,255,255,0.72);line-height:1.6;margin-bottom:13px}
+.cant a{display:inline-flex;align-items:center;gap:6px;background:#E87722;color:#fff;text-decoration:none;padding:10px 20px;border-radius:7px;font-size:13px;font-weight:500}
+.cant .or{color:rgba(255,255,255,0.4);font-size:11px;margin:10px 0}
+.cant .ph{color:#fff;font-size:15px;font-weight:500}
+.depbox{border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:11px;margin-bottom:11px}
+.deprow{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px}
+.deprow .dk{color:var(--color-text-secondary)}
+.deprow .dv{font-weight:500;color:#1B3A6B}
+.deprow .dvo{font-weight:500;color:#E87722}
+.card-num{margin-bottom:7px}
+.card-num input{width:100%;font-size:13px;padding:8px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
+.card3{display:grid;grid-template-columns:1fr 65px 52px;gap:5px;margin-bottom:6px}
+.card3 input{font-size:12px;padding:8px 7px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);width:100%}
+.tbox{background:var(--color-background-secondary);border-radius:6px;padding:11px;font-size:11px;line-height:1.7;max-height:150px;overflow-y:auto;margin-bottom:9px;border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+.tbox h4{font-size:11px;font-weight:500;margin-bottom:6px;color:var(--color-text-primary)}
+.cbrow{display:flex;align-items:flex-start;gap:7px;margin-bottom:10px;cursor:pointer}
+.cbrow input{margin-top:2px;accent-color:#1B3A6B;width:13px;height:13px;flex-shrink:0}
+.cbrow span{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.sig-cv{width:100%;height:100px;border:1.5px solid var(--color-border-secondary);border-radius:6px;cursor:crosshair;display:block;touch-action:none;background:var(--color-background-primary)}
+.sig-row{font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;display:flex;justify-content:space-between}
+.sig-clr{font-size:10px;color:#1B3A6B;cursor:pointer;background:none;border:none;padding:0}
+.note2{background:var(--color-background-secondary);border-radius:5px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary);margin-bottom:9px;border:0.5px solid var(--color-border-tertiary);line-height:1.5}
+.sdnote{font-size:10px;color:var(--color-text-secondary);margin-top:3px;line-height:1.4}
+.succ{text-align:center;padding:8px 0}
+.succ i{font-size:40px;color:#E87722;display:block;margin-bottom:11px}
+.succ h2{font-size:17px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px}
+.succ p{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:4px}
+.pmban{background:#E6F3E6;border-radius:7px;padding:9px 11px;font-size:11px;color:#27500A;margin-top:10px;display:flex;gap:6px;align-items:flex-start}
+.postban{background:#E6F1FB;border-radius:7px;padding:9px 11px;font-size:11px;color:#1B3A6B;margin-top:7px;display:flex;gap:6px;align-items:flex-start}
+.psum{margin-top:11px;padding:11px;background:var(--color-background-secondary);border-radius:7px;text-align:left}
+.psum .ph{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px}
+.psum .pb{font-size:11px;color:var(--color-text-secondary);line-height:1.7}
+.cbtn{width:100%;border:none;padding:10px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:5px}
+.cbtn.navy{background:#1B3A6B;color:#fff}
+.cbtn.orange{background:#E87722;color:#fff}
+.cbtn.ghost{background:var(--color-background-secondary);color:var(--color-text-primary);border:0.5px solid var(--color-border-secondary)}
+.cbtn:disabled{opacity:.4;cursor:not-allowed}
+.bk{background:none;border:none;color:var(--color-text-secondary);font-size:11px;cursor:pointer;padding:0;margin-bottom:11px;display:flex;align-items:center;gap:3px}
+.bk:hover{color:var(--color-text-primary)}
+.phup{border:1.5px dashed var(--color-border-secondary);border-radius:7px;padding:13px;text-align:center;cursor:pointer;color:var(--color-text-secondary);font-size:11px;margin-top:5px;background:var(--color-background-primary)}
+.phup i{font-size:22px;display:block;margin-bottom:5px}
+.phup:hover{background:var(--color-background-secondary)}
+.cab-info{background:#EDE8F5;border-radius:8px;padding:11px 13px;margin-bottom:12px;border:0.5px solid #AFA9EC}
+.cab-info .ci-title{font-size:12px;font-weight:500;color:#3C3489;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.cab-info .ci-body{font-size:11px;color:#534AB7;line-height:1.6}
+.mbg{display:none;position:absolute;inset:0;background:rgba(0,0,0,.48);border-radius:var(--border-radius-lg);align-items:center;justify-content:center;z-index:20}
+.mbg.open{display:flex}
+.mdl{background:var(--color-background-primary);border-radius:9px;padding:16px;width:420px;max-width:94%;max-height:90%;overflow-y:auto}
+.mdl h3{font-size:13px;font-weight:500;margin-bottom:11px;color:var(--color-text-primary)}
+.mdl label{font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:2px;margin-top:8px}
+.mdl input,.mdl select,.mdl textarea{width:100%;font-size:12px;padding:7px 9px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)}
+.mdl textarea{height:60px;resize:none}
+.mrow{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.macts{display:flex;gap:6px;margin-top:12px}
+.mcancel{flex:1;background:transparent;border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary);padding:7px;border-radius:5px;font-size:11px;cursor:pointer}
+.msubmit{flex:2;background:#1B3A6B;color:#fff;border:none;padding:7px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer}
+.agreetext{background:var(--color-background-secondary);border-radius:6px;padding:11px;font-size:11px;line-height:1.7;max-height:170px;overflow-y:auto;margin-bottom:9px;border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+.agreetext h4{font-size:11px;font-weight:500;margin-bottom:6px;color:var(--color-text-primary)}
+.agreetext p{margin-bottom:6px}
+.msig{width:100%;height:100px;border:1.5px solid var(--color-border-secondary);border-radius:6px;cursor:crosshair;display:block;touch-action:none;background:var(--color-background-primary)}
+.msig-row{font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;display:flex;justify-content:space-between}
+.msig-clr{font-size:10px;color:#1B3A6B;cursor:pointer;background:none;border:none;padding:0}
+.mname{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px}
+.ppgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:5px}
+.ppgrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px}
+.toast{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:#1B3A6B;color:#fff;padding:7px 16px;border-radius:20px;font-size:11px;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:30}
+.toast.show{opacity:1}
+.jback{display:none;align-items:center;gap:5px;width:100%;padding:10px 12px;background:var(--color-background-primary);border:none;border-bottom:0.5px solid var(--color-border-tertiary);color:#1B3A6B;font-size:12px;font-weight:600;cursor:pointer;position:sticky;top:0;z-index:3}
+@media(max-width:600px){
+  body{padding:0;gap:0;min-height:100dvh}
+  .page-header{padding:7px 12px;font-size:11px;text-align:center}
+  .appwrap{flex:1;min-height:0;width:100%;display:flex}
+  .shell{flex:1;min-height:0;width:100%;border-radius:0;border:none}
+  .av{display:none}
+  .topbar{padding:9px 12px}
+  .view-caption{padding:6px 12px}
+  .jobs{grid-template-columns:1fr;position:relative}
+  .jback{display:flex}
+  .jside{position:absolute;inset:0;z-index:5;transform:translateX(100%);transition:transform .22s ease;border-left:none}
+  .jobs.detail-open .jside{transform:none}
+  .jobs.detail-open .jleft{visibility:hidden}
+}
+</style>
+
+<h2 class="sr-only">BrushPass — admin, crew, and customer views</h2>
+<div class="appwrap" style="position:relative">
+<div class="shell" id="shell">
+  <div class="topbar">
+    <div class="logo">Brush<span>Pass</span></div>
+    <div style="display:flex;align-items:center;gap:7px">
+      <span style="color:rgba(255,255,255,0.55);font-size:10px;font-weight:500;white-space:nowrap">Viewing as</span>
+      <div class="vtoggle">
+        <button class="vbtn on" id="vAdmin" onclick="switchView('admin')">Admin</button>
+        <button class="vbtn" id="vCrew" onclick="switchView('crew')">Crew</button>
+        <button class="vbtn" id="vCustomer" onclick="switchView('customer')">Customer</button>
+      </div>
+    </div>
+    <div class="av" id="avEl">SV</div>
+  </div>
+  <div class="view-caption" id="viewCaption"></div>
+  <div class="crew-strip" id="crewStrip"><i class="ti ti-hard-hat" style="font-size:11px" aria-hidden="true"></i> Crew view — ProFinish Painting &nbsp;·&nbsp; <span style="color:#E87722">★★★★☆</span> &nbsp;4.2 stars &nbsp;·&nbsp; Tier 2</div>
+  <div class="navrow" id="navRow"></div>
+  <div class="main" id="mainArea"></div>
+</div>
+
+<!-- Post Job Modal -->
+<div class="mbg" id="mPostJob">
+  <div class="mdl">
+    <h3><i class="ti ti-plus" style="color:#E87722;margin-right:4px" aria-hidden="true"></i>Post a new job</h3>
+    <label>Job title</label><input id="pjTitle" placeholder="Exterior repaint — full 2-story">
+    <div class="mrow"><div><label>Customer</label><input id="pjCustomer" placeholder="J. Smith"></div><div><label>Neighborhood</label><input id="pjNeighborhood" placeholder="Germantown"></div></div>
+    <div class="mrow"><div><label>Type</label><select id="pjType"><option>Exterior</option><option>Interior</option><option>Deck</option><option>Cabinet</option></select></div><div><label>Sold price ($)</label><input type="number" id="pjPrice" placeholder="3500"></div></div>
+    <div class="mrow"><div><label>Crew payout ($)</label><input type="number" id="pjPayout" placeholder="2450"></div><div><label>Start date</label><input type="date" id="pjDate"></div></div>
+    <label>Min star rating to see job (optional)</label>
+    <select id="pjMinStars"><option value="0">Any crew</option><option value="3">3+ stars</option><option value="4">4+ stars</option><option value="4.5">4.5+ stars</option></select>
+    <label>Scope (one item per line)</label><textarea id="pjScope" placeholder="Prep and paint siding&#10;2 coats throughout"></textarea>
+    <label>Photos</label>
+    <div class="uzone" onclick="document.getElementById('pjPhotos').click()"><i class="ti ti-camera" style="font-size:14px;display:block;margin-bottom:2px" aria-hidden="true"></i>Upload photos</div>
+    <input type="file" id="pjPhotos" accept="image/*" multiple style="display:none" onchange="handlePJPhotos(event)">
+    <div class="ppgrid" id="pjPhotoGrid"></div>
+    <div class="macts"><button class="mcancel" onclick="closeM('mPostJob')">Cancel</button><button class="msubmit" onclick="submitJob()">Post job</button></div>
+  </div>
+</div>
+
+<!-- Crew Agreement Modal -->
+<div class="mbg" id="mAgree">
+  <div class="mdl">
+    <h3><i class="ti ti-file-text" style="color:#E87722;margin-right:4px" aria-hidden="true"></i>Accept job & sign agreement</h3>
+    <div class="agreetext" id="agreeText"></div>
+    <div class="mname">
+      <div><label style="font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:2px">Full name</label><input id="aSigName" placeholder="James Taylor" style="width:100%;font-size:11px;padding:7px 9px;border-radius:5px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)"></div>
+      <div><label style="font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:2px">Company</label><input id="aSigCompany" placeholder="Taylor Painting Co." style="width:100%;font-size:11px;padding:7px 9px;border-radius:5px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)"></div>
+    </div>
+    <div class="msig-row"><span>Sign below</span><button class="msig-clr" onclick="clearASig()"><i class="ti ti-refresh" aria-hidden="true"></i> Clear</button></div>
+    <canvas class="msig" id="aSigCanvas" width="390" height="100"></canvas>
+    <div class="macts"><button class="mcancel" onclick="closeM('mAgree')">Cancel</button><button class="msubmit" style="background:#2a6b2a" onclick="submitAgree()"><i class="ti ti-check" aria-hidden="true"></i> Sign & take this job</button></div>
+  </div>
+</div>
+
+<!-- Post Event Modal -->
+<div class="mbg" id="mEvent">
+  <div class="mdl">
+    <h3><i class="ti ti-calendar-event" style="color:#E87722;margin-right:4px" aria-hidden="true"></i>Post event or announcement</h3>
+    <label>Title</label><input id="evTitle" placeholder="Cabinet painting training day">
+    <div class="mrow"><div><label>Date</label><input type="date" id="evDate"></div><div><label>Time</label><input type="time" id="evTime" value="12:00"></div></div>
+    <div class="mrow"><div><label>Location</label><input id="evLoc" placeholder="Middleton shop"></div><div><label>Type</label><select id="evType"><option value="training">Training</option><option value="social">Social</option><option value="announcement">Announcement</option></select></div></div>
+    <label>Description</label><textarea id="evDesc" placeholder="Tell crews what to expect..."></textarea>
+    <div class="macts"><button class="mcancel" onclick="closeM('mEvent')">Cancel</button><button class="msubmit" onclick="submitEvent()">Post to all crew</button></div>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<div class="mbg" id="mReview">
+  <div class="mdl">
+    <h3><i class="ti ti-star" style="color:#E87722;margin-right:4px" aria-hidden="true"></i>Review crew — <span id="reviewJobTitle"></span></h3>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">How did the crew perform on this job?</div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:6px">Star rating</div>
+      <div class="star-row" id="starRow">
+        <span class="star" onclick="setReviewStar(1)">★</span>
+        <span class="star" onclick="setReviewStar(2)">★</span>
+        <span class="star" onclick="setReviewStar(3)">★</span>
+        <span class="star" onclick="setReviewStar(4)">★</span>
+        <span class="star" onclick="setReviewStar(5)">★</span>
+      </div>
+    </div>
+    <label>Notes (optional)</label>
+    <textarea id="reviewNotes" placeholder="Crew showed up on time, clean work, no issues..."></textarea>
+    <div class="macts"><button class="mcancel" onclick="closeM('mReview')">Cancel</button><button class="msubmit" onclick="submitReview()">Submit review</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+</div>
+
+<script>
+const NOW=Date.now(),HR=3600000;
+let VIEW='admin',NAV='jobs',ACTIVE_JOB=null;
+let pjPhotos=[],aSigCtx=null,aSigDrawing=false,aSigHasContent=false,agreeJobId=null;
+let cqS=null,cqSigCtx=null,cqSigDrawing=false,cqSigHasContent=false,cqPhotos=[];
+let reviewJobId=null,reviewStars=0;
+
+const RATES={wallSqFt:1.85,ceilingSqFt:1.40,doorEach:95,windowEach:45,trimLf:2.20,crownLf:3.10,chairLf:2.50,colorMult:1.15,repairsAdd:150,cabPerPiece:150,cabBoxFlat:300,depPct:0.30,minInt:450,minCab:2500};
+const TC={Exterior:'#1B3A6B',Interior:'#2a6b2a',Deck:'#854F0B',Cabinet:'#5B3A9B'};
+const TI={Exterior:'ti-home',Interior:'ti-sofa',Deck:'ti-trees',Cabinet:'ti-layout-board'};
+const CREW={name:'ProFinish Painting',stars:4.2,tier:2,activeJobs:1,maxJobs:2};
+
+const jobs=[
+  {id:1,title:"Exterior repaint \u2014 full 2-story",customer:"Henderson",neighborhood:"Germantown",type:"Exterior",price:4200,payout:2450,start:"Jun 23",status:"available",minStars:0,photos:[],workOrder:{name:"WO-1042.pdf",size:"84 KB",date:"Jun 9"},files:[{name:"Paint spec.pdf",type:"pdf",size:"120 KB",date:"Jun 9"}],links:[{label:"CompanyCam",url:"https://app.companycam.com/1042",icon:"ti-camera"}],scope:["Prep and paint siding","All trim and fascia","Caulk all penetrations","2 coats throughout","Power wash before painting"],deposit:1260,grabbedBy:null,accepted:false,completed:false,review:null},
+  {id:2,title:"Interior \u2014 master bed, living, kitchen",customer:"Williams",neighborhood:"East Memphis",type:"Interior",price:2800,payout:1650,start:"Jun 19",status:"grabbed",minStars:0,photos:[],workOrder:null,files:[],links:[],scope:["Walls \u2014 master bedroom","Walls \u2014 living room","Walls & ceiling \u2014 kitchen","All doors and trim"],deposit:840,grabbedBy:"CertaPro East",accepted:true,completed:false,review:null},
+  {id:3,title:"Deck stain + privacy fence",customer:"Thweatt",neighborhood:"Collierville",type:"Deck",price:1900,payout:1100,start:"Jun 26",status:"available",minStars:3,photos:[],workOrder:null,files:[],links:[],scope:["Deck ~400 SF","Fence ~120 LF","Solid stain per spec"],deposit:570,grabbedBy:null,accepted:false,completed:false,review:null},
+  {id:4,title:"Cabinet repaint \u2014 kitchen & laundry",customer:"Odom",neighborhood:"Midtown",type:"Cabinet",price:2900,payout:1800,start:"Jun 28",status:"available",minStars:4,photos:[],workOrder:null,files:[],links:[],scope:["22 doors + 6 drawer fronts","Sand, prime, 3 coats Emerald Urethane","Hardware removal & reinstall","Cabinet boxes included"],deposit:870,grabbedBy:null,accepted:false,completed:false,review:null},
+  {id:5,title:"Interior \u2014 whole house repaint",customer:"Patel",neighborhood:"Cordova",type:"Interior",price:5100,payout:3100,start:"Jul 14",status:"completed",minStars:0,photos:[],workOrder:null,files:[],links:[],scope:["All walls \u2014 4 bed 2.5 bath","All ceilings","All doors and trim","2 coats walls, 1 coat ceiling"],deposit:1530,grabbedBy:"ProFinish Painting",accepted:true,completed:true,review:{stars:5,notes:"Excellent work. On time, clean, zero callbacks.",date:"Jun 5"}},
+];
+
+const events=[
+  {id:1,title:"Cabinet painting training day",month:"Jul",day:"17",time:"12:00 PM",location:"Middleton shop \u2014 Munford, TN",type:"training",desc:"Full cabinet training at the shop. Sprayer setup, shellac priming, finish coats, door handling. We're cooking lunch \u2014 come eat and learn. All crew welcome.",rsvps:{going:4,maybe:2},myRsvp:null},
+  {id:2,title:"New job types dropping this week",month:"Jun",day:"12",time:"",location:"",type:"announcement",desc:"Adding exterior brick accent and deck restoration jobs this week. Several are already sold and available to grab.",rsvps:null,myRsvp:null},
+];
+const aN=[
+  {id:'a1',icon:"ti-briefcase",ib:"#D9E8F5",ic:"#1B3A6B",title:"Job grabbed: Exterior repaint \u2014 Henderson",sub:"ProFinish Painting grabbed this job.",time:"2h ago",unread:true},
+  {id:'a2',icon:"ti-star",ib:"#FDF0E0",ic:"#E87722",title:"New review: Interior \u2014 whole house Cordova",sub:"Customer left 5 stars for ProFinish Painting.",time:"1d ago",unread:true},
+  {id:'a3',icon:"ti-calendar-event",ib:"#FDF0E0",ic:"#E87722",title:"6 RSVPs for cabinet training day",sub:"4 going \u00b7 2 maybe",time:"2d ago",unread:false},
+];
+const cN=[
+  {id:'c1',icon:"ti-briefcase",ib:"#D9E8F5",ic:"#1B3A6B",title:"New job available: Cabinet repaint \u2014 Midtown",sub:"$1,800 payout \u00b7 4+ stars required",time:"2h ago",unread:true},
+  {id:'c2',icon:"ti-calendar-event",ib:"#FDF0E0",ic:"#E87722",title:"Training day: Jul 17 \u2014 cabinet painting",sub:"Lunch provided. RSVP below.",time:"Yesterday",unread:true},
+  {id:'c3',icon:"ti-star",ib:"#FDF0E0",ic:"#E87722",title:"New review on your profile",sub:"5 stars from Patel job \u2014 Cordova",time:"1d ago",unread:false},
+];
+
+function canCrewSeeJob(j){return CREW.stars>=j.minStars;}
+function isMyJob(j){return j.grabbedBy===CREW.name;}
+function myActiveCount(){return jobs.filter(j=>j.grabbedBy===CREW.name&&!j.completed).length;}
+function canGrab(){return myActiveCount()<CREW.maxJobs;}
+
+function tagCls(t){return t==="Exterior"?"tag-ext":t==="Interior"?"tag-int":t==="Cabinet"?"tag-cab":"tag-deck";}
+
+function statusTagAdmin(j){
+  if(j.completed)return`<span class="tag tag-done">Completed</span>`;
+  if(j.status==='grabbed')return`<span class="tag tag-grabbed">In progress \u2014 ${j.grabbedBy}</span>`;
+  if(j.minStars>0)return`<span class="tag" style="background:#EDE8F5;color:#3C3489">${j.minStars}+ \u2605 required</span>`;
+  return`<span class="tag tag-open">Available</span>`;
+}
+function statusTagCrew(j){
+  if(!canCrewSeeJob(j))return`<span class="tag" style="background:#F1EFE8;color:#444441">Requires ${j.minStars}+ \u2605</span>`;
+  if(j.completed&&isMyJob(j))return`<span class="tag tag-done">\u2713 Completed</span>`;
+  if(isMyJob(j)&&j.accepted)return`<span class="tag tag-grabbed">My job</span>`;
+  if(isMyJob(j))return`<span class="tag tag-grabbed">Grabbed \u2014 sign required</span>`;
+  if(j.status==='grabbed')return`<span class="tag" style="background:#F1EFE8;color:#444441">Taken</span>`;
+  return`<span class="tag tag-open">Available</span>`;
+}
+
+function switchView(v){
+  VIEW=v;
+  document.querySelectorAll('.vbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('v'+v.charAt(0).toUpperCase()+v.slice(1)).classList.add('on');
+  document.getElementById('avEl').textContent=v==='admin'?'SV':v==='crew'?'PF':'C';
+  document.getElementById('crewStrip').style.display=v==='crew'?'flex':'none';
+  const caps={
+    admin:'<strong>Admin view</strong> — what Middleton Painting (the company) sees: post jobs, manage crews, set rates. Tap Crew or Customer above to switch.',
+    crew:'<strong>Crew view</strong> — what a subcontractor sees: grab jobs, sign agreements, get paid. Tap Admin or Customer above to switch.',
+    customer:'<strong>Customer view</strong> — Middleton\u2019s public instant-quote tool. Tap Admin or Crew above to switch.'
+  };
+  document.getElementById('viewCaption').innerHTML='<i class="ti ti-eye" aria-hidden="true"></i><span>'+caps[v]+'</span>';
+  ACTIVE_JOB=null;NAV=v==='customer'?'quote':'jobs';
+  buildNav();renderMain();
+}
+function switchNav(n){NAV=n;buildNav();renderMain();}
+
+function buildNav(){
+  const nr=document.getElementById('navRow');
+  if(VIEW==='customer'){nr.innerHTML='';return;}
+  const isAdmin=VIEW==='admin';
+  const unread=(isAdmin?aN:cN).filter(x=>x.unread).length;
+  nr.innerHTML=`
+    <div class="ntab${NAV==='jobs'?' on':''}" onclick="switchNav('jobs')"><i class="ti ti-briefcase" aria-hidden="true"></i> Jobs</div>
+    <div class="ntab${NAV==='events'?' on':''}" onclick="switchNav('events')"><i class="ti ti-calendar-event" aria-hidden="true"></i> Events <span class="nbadge">${events.length}</span></div>
+    <div class="ntab${NAV==='notifs'?' on':''}" onclick="switchNav('notifs')"><i class="ti ti-bell" aria-hidden="true"></i> Alerts${unread?` <span class="nbadge">${unread}</span>`:''}</div>
+    ${isAdmin?`<div class="ntab${NAV==='crew-ratings'?' on':''}" onclick="switchNav('crew-ratings')"><i class="ti ti-star" aria-hidden="true"></i> Crew ratings</div>`:''}
+    ${isAdmin?`<div class="ntab${NAV==='tiers'?' on':''}" onclick="switchNav('tiers')"><i class="ti ti-award" aria-hidden="true"></i> Tiers</div>`:''}
+    ${isAdmin?`<div class="ntab${NAV==='rates'?' on':''}" onclick="switchNav('rates')"><i class="ti ti-settings" aria-hidden="true"></i> Rates</div>`:''}
+    ${isAdmin?`<div class="ntab${NAV==='roadmap'?' on':''}" onclick="switchNav('roadmap')"><i class="ti ti-map" aria-hidden="true"></i> Roadmap</div>`:''}`;
+}
+
+function renderMain(){
+  const el=document.getElementById('mainArea');
+  if(VIEW==='customer'){el.innerHTML='<div class="cqpanel"><div class="cqinner" id="cqRoot"></div></div>';initCQ();return;}
+  if(NAV==='jobs'){el.innerHTML=buildJobsPanel();setTimeout(renderJobList,0);return;}
+  if(NAV==='events'){el.innerHTML='<div class="evpanel" id="evPanel"></div>';renderEvents();return;}
+  if(NAV==='notifs'){el.innerHTML='<div class="nfpanel" id="nfPanel"></div>';renderNotifs();return;}
+  if(NAV==='crew-ratings'){el.innerHTML='<div class="nfpanel" id="crPanel"></div>';renderCrewRatings();return;}
+  if(NAV==='tiers'){el.innerHTML='<div class="nfpanel" id="tierPanel"></div>';renderTiers();return;}
+  if(NAV==='rates'){el.innerHTML='<div class="ratepanel" id="ratePanel"></div>';renderRates();return;}
+  if(NAV==='roadmap'){el.innerHTML='<div class="roadmap-panel" id="rmPanel"></div>';renderRoadmap();return;}
+}
+
+function buildJobsPanel(){
+  return`<div class="jobs">
+    <div class="jleft">
+      <div class="jtoolbar">
+        <input type="text" class="jsearch" placeholder="\ud83d\udd0d Search..." id="jsrch" oninput="renderJobList()">
+        <select class="jsel" id="jtypeF" onchange="renderJobList()"><option value="">All types</option><option>Exterior</option><option>Interior</option><option>Deck</option><option>Cabinet</option></select>
+        ${VIEW==='admin'?`<button class="postbtn" onclick="openM('mPostJob')"><i class="ti ti-plus" aria-hidden="true"></i> Post</button>`:''}
+      </div>
+      ${VIEW==='crew'?`<div style="padding:8px 12px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;color:var(--color-text-secondary);display:flex;justify-content:space-between;align-items:center"><span>Active jobs: <strong style="color:var(--color-text-primary)">${myActiveCount()} / ${CREW.maxJobs}</strong> (Tier ${CREW.tier})</span><span>Rating: <strong style="color:#E87722">${CREW.stars} \u2605</strong></span></div>`:''}
+      <div class="jlist" id="jlist"></div>
+    </div>
+    <div class="jside" id="jside">
+      <button class="jback" onclick="closeDetail()"><i class="ti ti-arrow-left" aria-hidden="true"></i> All jobs</button>
+      <div class="jempty" id="jempty"><i class="ti ti-hammer" style="font-size:26px;opacity:.3" aria-hidden="true"></i><div>Select a job</div></div>
+      <div id="jdp" style="display:none"></div>
+    </div>
+  </div>`;
+}
+
+function renderJobList(){
+  const el=document.getElementById('jlist');if(!el)return;
+  const s=(document.getElementById('jsrch')||{value:''}).value.toLowerCase();
+  const t=(document.getElementById('jtypeF')||{value:''}).value;
+  let list=jobs.filter(j=>(!s||(j.title+j.neighborhood+(VIEW==='admin'?j.customer:'')).toLowerCase().includes(s))&&(!t||j.type===t));
+  if(VIEW==='crew')list=list.filter(j=>canCrewSeeJob(j));
+  if(!list.length){el.innerHTML=`<div style="text-align:center;padding:28px;color:var(--color-text-secondary);font-size:12px">No jobs available</div>`;return;}
+  el.innerHTML=list.map(j=>{
+    const thumb=j.photos&&j.photos.length?`<img src="${j.photos[0]}" style="width:72px;height:100%;min-height:80px;object-fit:cover" alt="">`:
+      `<div class="jthumb" style="background:${TC[j.type]||'#888'}"><i class="ti ${TI[j.type]||'ti-paint'}" aria-hidden="true"></i></div>`;
+    const priceDisp=VIEW==='crew'?`$${j.payout.toLocaleString()} payout`:`$${j.price.toLocaleString()}`;
+    const stag=VIEW==='admin'?statusTagAdmin(j):statusTagCrew(j);
+    const mine=isMyJob(j);
+    return`<div class="jcard${j.id===ACTIVE_JOB?' sel':''}${mine?' mine':''}" onclick="selJob(${j.id})">${thumb}
+      <div class="jinfo">
+        <div class="jtop"><div class="jtitle">${j.title}</div><div class="jprice">${priceDisp}</div></div>
+        <div class="jmeta"><i class="ti ti-map-pin" style="font-size:9px" aria-hidden="true"></i> ${j.neighborhood} \u00b7 Start ${j.start}</div>
+        <div class="jtags"><span class="tag ${tagCls(j.type)}">${j.type}</span>${stag}${j.minStars>0&&VIEW==='admin'?`<span class="tag" style="background:#EDE8F5;color:#3C3489;margin-left:2px">${j.minStars}+ \u2605</span>`:''}</div>
+        <div class="jfoot"><span>${VIEW==='admin'?`$${j.price.toLocaleString()} sold`:`${j.start}`}</span><span>${j.completed?'Completed':j.status==='grabbed'?'In progress':'Available now'}</span></div>
+      </div></div>`;
+  }).join('');
+  if(ACTIVE_JOB)renderDP();
+}
+
+function selJob(id){ACTIVE_JOB=id;renderJobList();}
+
+function renderDP(){
+  const em=document.getElementById('jempty');const dp=document.getElementById('jdp');
+  if(!em||!dp)return;
+  const j=jobs.find(x=>x.id===ACTIVE_JOB);if(!j)return;
+  em.style.display='none';dp.style.display='block';
+  const jc=document.querySelector('.jobs');if(jc)jc.classList.add('detail-open');
+  dp.innerHTML=VIEW==='admin'?buildAdminDP(j):buildCrewDP(j);
+}
+
+function closeDetail(){
+  ACTIVE_JOB=null;
+  const jc=document.querySelector('.jobs');if(jc)jc.classList.remove('detail-open');
+  const dp=document.getElementById('jdp');const em=document.getElementById('jempty');
+  if(dp)dp.style.display='none';if(em)em.style.display='flex';
+  renderJobList();
+}
+
+function buildAdminDP(j){
+  const hero=j.photos&&j.photos.length?`<img class="dp-hero" src="${j.photos[0]}" alt="">`:
+    `<div class="dp-nophoto" onclick="trigPhoto(${j.id})"><i class="ti ti-camera" style="font-size:13px" aria-hidden="true"></i><span>Add photos</span></div>`;
+  const strip=j.photos&&j.photos.length?`<div class="dp-strip">${j.photos.map((p,i)=>`<div class="sp-item"><img src="${p}" class="${i===0?'sel':''}" onclick="setHero(${j.id},${i})" alt="Photo ${i+1}"><button class="sp-del" onclick="delPhoto(${j.id},${i})">\u2715</button></div>`).join('')}<div class="sp-add" onclick="trigPhoto(${j.id})"><i class="ti ti-plus" aria-hidden="true"></i></div></div>`:'';
+  const reviewSec=j.completed&&!j.review?`<button class="obtn" onclick="openReview(${j.id})"><i class="ti ti-star" aria-hidden="true"></i> Leave crew review</button>`:
+    j.review?`<div class="review-box"><div style="font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Crew review</div><div style="color:#E87722;font-size:14px;margin-bottom:3px">${'\u2605'.repeat(j.review.stars)}${'\u2606'.repeat(5-j.review.stars)}</div><div style="font-size:11px;color:var(--color-text-secondary)">${j.review.notes}</div></div>`:'';
+  return`
+    <input type="file" id="dpPhInp" accept="image/*" multiple style="display:none" onchange="handleDPPhotos(event,${j.id})">
+    <input type="file" id="dpWOInp" accept=".pdf" style="display:none" onchange="handleWO(event,${j.id})">
+    <input type="file" id="dpFileInp" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg" multiple style="display:none" onchange="handleFiles(event,${j.id})">
+    ${hero}${strip}
+    <div class="dpb">
+      <div class="dp-title">${j.title}</div>
+      <div class="dp-price">$${j.price.toLocaleString()} <span style="font-size:11px;font-weight:400;color:var(--color-text-secondary)">sold &nbsp;\u00b7&nbsp; $${j.payout.toLocaleString()} payout</span></div>
+      <div class="dp-meta"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${j.neighborhood} \u00b7 Start ${j.start}${j.minStars>0?` &nbsp;\u00b7&nbsp; <span style="color:#5B3A9B">${j.minStars}+ \u2605 only</span>`:''}</div>
+      ${j.status==='grabbed'?`<div style="background:#FDF0E0;border-radius:7px;padding:8px 10px;margin-bottom:8px;font-size:11px;color:#633806;display:flex;gap:7px;align-items:center"><i class="ti ti-user-check" style="font-size:14px;color:#E87722" aria-hidden="true"></i><span>Grabbed by <strong>${j.grabbedBy}</strong>${j.accepted?' \u2014 agreement signed':' \u2014 awaiting signature'}</span></div>`:''}
+      ${j.completed?`<div style="background:#E6F3E6;border-radius:7px;padding:8px 10px;margin-bottom:8px;font-size:11px;color:#27500A;display:flex;gap:7px;align-items:center"><i class="ti ti-circle-check" style="color:#2a6b2a;font-size:14px" aria-hidden="true"></i><span>Job completed by ${j.grabbedBy}</span></div>`:''}
+      <div class="dtabs">
+        <div class="dtab on" onclick="dtab(this,'dts')">Scope</div>
+        <div class="dtab" onclick="dtab(this,'dtw')">Work order${j.workOrder?' \ud83d\udcce':''}</div>
+        <div class="dtab" onclick="dtab(this,'dtf')">Files${j.files.length?` (${j.files.length})`:''}</div>
+        <div class="dtab" onclick="dtab(this,'dtl')">Links${j.links.length?` (${j.links.length})`:''}</div>
+      </div>
+      <div id="dts">
+        <div class="dpl">Scope of work</div><ul class="sli">${j.scope.map(s=>`<li>${s}</li>`).join('')}</ul>
+        <div class="sm2"><div class="sc"><div class="sl">Deposit collected</div><div class="sv" style="color:#1B3A6B">$${j.deposit.toLocaleString()}</div></div><div class="sc"><div class="sl">Crew payout</div><div class="sv" style="color:#E87722">$${j.payout.toLocaleString()}</div></div></div>
+        ${reviewSec}
+        ${!j.completed&&j.status==='grabbed'?`<button class="pbtn" style="background:#2a6b2a;margin-top:8px" onclick="markComplete(${j.id})"><i class="ti ti-circle-check" aria-hidden="true"></i> Mark job complete</button>`:''}
+      </div>
+      <div id="dtw" style="display:none">${buildWO(j)}</div>
+      <div id="dtf" style="display:none"><div class="dpl">Files</div><div id="flist${j.id}">${buildFiles(j)}</div><div class="uzone" onclick="document.getElementById('dpFileInp').click()"><i class="ti ti-upload" style="font-size:13px;display:block;margin-bottom:2px" aria-hidden="true"></i>Upload files</div></div>
+      <div id="dtl" style="display:none"><div class="dpl">Links</div><div id="llist${j.id}">${buildLinks(j,true)}</div>
+        <div class="ladd"><input type="text" id="ll${j.id}" placeholder="Label"><input type="text" id="lu${j.id}" placeholder="https://..."><button class="ladd-btn" onclick="addLink(${j.id})">+ Add link</button></div></div>
+    </div>`;
+}
+
+function buildCrewDP(j){
+  const hero=j.photos&&j.photos.length?`<img class="dp-hero" src="${j.photos[0]}" alt="">`:
+    `<div style="height:50px;background:var(--color-background-tertiary);display:flex;align-items:center;justify-content:center;color:var(--color-text-secondary);font-size:11px"><i class="ti ti-photo" style="margin-right:4px" aria-hidden="true"></i>No photos</div>`;
+  const mine=isMyJob(j);
+  let actionSec='';
+  if(j.completed&&mine){
+    actionSec=`<div class="sban" style="background:#E6F3E6"><i class="ti ti-circle-check" style="color:#2a6b2a" aria-hidden="true"></i><p>Job completed</p></div>`;
+  } else if(mine&&j.accepted){
+    actionSec=`<div style="background:#E6F3E6;border-radius:7px;padding:10px;text-align:center;margin-top:8px"><i class="ti ti-circle-check" style="font-size:16px;color:#2a6b2a;display:block;margin-bottom:4px" aria-hidden="true"></i><div style="font-size:12px;color:#27500A;font-weight:500">This is your job</div><div style="font-size:11px;color:#3B6D11;margin-top:2px">Agreement signed \u00b7 Start ${j.start}</div></div>
+    <button class="obtn" style="background:#2a6b2a;margin-top:8px" onclick="crewMarkComplete(${j.id})"><i class="ti ti-flag" aria-hidden="true"></i> Mark as complete</button>`;
+  } else if(mine&&!j.accepted){
+    actionSec=`<div style="background:#FDF0E0;border-radius:7px;padding:8px;text-align:center;margin-top:6px;border:0.5px solid #E8C98A"><div style="font-size:11px;color:#633806;margin-bottom:6px">You grabbed this job \u2014 sign the agreement to confirm</div>
+    <button class="gbtn" style="margin-top:0" onclick="openAgree(${j.id})"><i class="ti ti-file-text" aria-hidden="true"></i> Sign agreement & confirm</button></div>`;
+  } else if(j.status==='grabbed'){
+    actionSec=`<div style="background:#F1EFE8;border-radius:7px;padding:10px;text-align:center;margin-top:8px"><i class="ti ti-lock" style="font-size:16px;color:#888;display:block;margin-bottom:4px" aria-hidden="true"></i><div style="font-size:12px;color:var(--color-text-secondary)">This job has been grabbed by another crew</div></div>`;
+  } else if(!canGrab()){
+    actionSec=`<div style="background:#FDF0E0;border-radius:7px;padding:10px;text-align:center;margin-top:8px;border:0.5px solid #E8C98A"><div style="font-size:12px;color:#633806;font-weight:500">Job limit reached</div><div style="font-size:11px;color:#854F0B;margin-top:2px">Complete an active job to grab this one (Tier ${CREW.tier} \u2014 max ${CREW.maxJobs} active)</div></div>`;
+  } else {
+    actionSec=`<button class="gbtn" onclick="crewGrab(${j.id})"><i class="ti ti-hand-grab" aria-hidden="true"></i> Grab this job \u2014 $${j.payout.toLocaleString()}</button>`;
+  }
+  return`${hero}
+    <div class="payout-bar"><i class="ti ti-cash" aria-hidden="true"></i><div><strong>$${j.payout.toLocaleString()} payout</strong>Paid within 15 days of customer sign-off</div></div>
+    <div class="dpb">
+      <div class="dp-title">${j.title}</div>
+      <div class="dp-meta"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${j.neighborhood} \u00b7 Start ${j.start}</div>
+      <div class="dtabs">
+        <div class="dtab on" onclick="dtab(this,'cts')">Scope</div>
+        ${j.workOrder?`<div class="dtab" onclick="dtab(this,'ctw')">Work order</div>`:''}
+        ${j.files.length?`<div class="dtab" onclick="dtab(this,'ctf')">Files (${j.files.length})</div>`:''}
+        ${j.links.length?`<div class="dtab" onclick="dtab(this,'ctl')">Links</div>`:''}
+      </div>
+      <div id="cts">
+        <ul class="sli">${j.scope.map(s=>`<li>${s}</li>`).join('')}</ul>
+        <div class="sm2"><div class="sc"><div class="sl">Payout</div><div class="sv" style="color:#E87722">$${j.payout.toLocaleString()}</div></div><div class="sc"><div class="sl">Start date</div><div class="sv">${j.start}</div></div></div>
+        ${actionSec}
+      </div>
+      ${j.workOrder?`<div id="ctw" style="display:none">${buildWO(j,true)}</div>`:''}
+      ${j.files.length?`<div id="ctf" style="display:none">${buildFiles(j,true)}</div>`:''}
+      ${j.links.length?`<div id="ctl" style="display:none">${buildLinks(j)}</div>`:''}
+    </div>`;
+}
+
+function crewGrab(id){
+  const j=jobs.find(x=>x.id===id);
+  if(!canGrab()){toast('Job limit reached for your tier');return;}
+  if(j.status==='grabbed'){toast('Sorry \u2014 just grabbed by another crew');return;}
+  j.status='grabbed';j.grabbedBy=CREW.name;
+  toast('Job grabbed! Sign the agreement to confirm.');
+  renderJobList();
+}
+
+function crewMarkComplete(id){
+  const j=jobs.find(x=>x.id===id);
+  j.completed=true;j.status='completed';
+  toast('Marked complete! Admin will confirm and process payment.');
+  renderJobList();
+}
+
+function markComplete(id){
+  const j=jobs.find(x=>x.id===id);
+  j.completed=true;j.status='completed';
+  toast('Job marked complete. Leave a review for the crew.');
+  renderJobList();
+}
+
+function dtab(el,id){
+  el.closest('.dpb').querySelectorAll('.dtab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  ['dts','dtw','dtf','dtl','cts','ctw','ctf','ctl'].forEach(i=>{const e=document.getElementById(i);if(e)e.style.display='none';});
+  const t=document.getElementById(id);if(t)t.style.display='block';
+}
+
+function buildWO(j,ro=false){
+  if(j.workOrder){
+    const btns=ro?`<button class="wo-btn" onclick="toast('Opening...')"><i class="ti ti-eye" aria-hidden="true"></i> View</button><button class="wo-btn" onclick="toast('Downloading...')"><i class="ti ti-download" aria-hidden="true"></i> Download</button>`:
+      `<button class="wo-btn" onclick="toast('Opening...')"><i class="ti ti-eye" aria-hidden="true"></i> View</button><button class="wo-btn" onclick="toast('Downloading...')"><i class="ti ti-download" aria-hidden="true"></i> Download</button><button class="wo-btn r" onclick="document.getElementById('dpWOInp').click()"><i class="ti ti-refresh" aria-hidden="true"></i> Replace</button><button class="wo-btn d" onclick="removeWO(${j.id})"><i class="ti ti-trash" aria-hidden="true"></i></button>`;
+    return`<div class="wo-box"><div class="wo-top"><div class="wo-icon"><i class="ti ti-file-type-pdf" style="color:#A32D2D" aria-hidden="true"></i></div><div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">${j.workOrder.name}</div><div style="font-size:10px;color:var(--color-text-secondary)">${j.workOrder.size} \u00b7 ${j.workOrder.date}</div></div></div><div class="wo-acts">${btns}</div></div>`;
+  }
+  return`<div style="text-align:center;padding:18px;color:var(--color-text-secondary)"><i class="ti ti-file-description" style="font-size:26px;display:block;margin-bottom:7px;opacity:.3" aria-hidden="true"></i><div style="font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px">No work order attached</div><button onclick="document.getElementById('dpWOInp').click()" style="background:#1B3A6B;color:#fff;border:none;padding:6px 13px;border-radius:5px;font-size:11px;cursor:pointer"><i class="ti ti-upload" aria-hidden="true"></i> Upload PDF</button></div>`;
+}
+
+function buildFiles(j,ro=false){
+  if(!j.files.length)return`<div style="color:var(--color-text-secondary);font-size:11px;padding:5px 0">No files attached.</div>`;
+  const im={pdf:'ti-file-type-pdf',doc:'ti-file-type-doc',jpg:'ti-photo',jpeg:'ti-photo',png:'ti-photo'};
+  const bm={pdf:'#FCEBEB',doc:'#D9E8F5',jpg:'#FDF0E0',png:'#FDF0E0'};const cm={pdf:'#A32D2D',doc:'#1B3A6B',jpg:'#854F0B',png:'#854F0B'};
+  return j.files.map((f,i)=>{const e=(f.type||f.name.split('.').pop()).toLowerCase();
+    return`<div class="frow"><div class="ficon" style="background:${bm[e]||'#F1EFE8'}"><i class="ti ${im[e]||'ti-file'}" style="color:${cm[e]||'#444'}" aria-hidden="true"></i></div><div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</div><div style="font-size:10px;color:var(--color-text-secondary)">${f.size} \u00b7 ${f.date}</div></div><button style="background:none;border:none;cursor:pointer;color:var(--color-text-secondary);font-size:12px;padding:2px" onclick="toast('Downloading...')" aria-label="Download"><i class="ti ti-download" aria-hidden="true"></i></button>${!ro?`<button style="background:none;border:none;cursor:pointer;color:var(--color-text-secondary);font-size:12px;padding:2px" onclick="delFile(${j.id},${i})" aria-label="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button>`:''}</div>`;}).join('');
+}
+
+function buildLinks(j,canDel=false){
+  if(!j.links.length)return`<div style="color:var(--color-text-secondary);font-size:11px;padding:5px 0">No links.</div>`;
+  return j.links.map((l,i)=>`<div class="lrow"><div style="width:24px;height:24px;border-radius:4px;background:#D9E8F5;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px"><i class="ti ${l.icon||'ti-link'}" style="color:#1B3A6B" aria-hidden="true"></i></div><div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">${l.label}</div><div style="font-size:10px;color:#1B3A6B;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" onclick="toast('Opening: ${l.label}')">${l.url}</div></div>${canDel?`<button style="background:none;border:none;cursor:pointer;color:var(--color-text-secondary);font-size:12px;padding:2px" onclick="delLink(${j.id},${i})" aria-label="Remove"><i class="ti ti-trash" aria-hidden="true"></i></button>`:''}</div>`).join('');
+}
+
+function renderCrewRatings(){
+  const el=document.getElementById('crPanel');if(!el)return;
+  const crews=[
+    {name:'ProFinish Painting',stars:4.2,jobs:12,tier:2,reviews:[{job:'Exterior Germantown',stars:5,note:'On time, clean, zero callbacks'},{job:'Interior Williams',stars:4,note:'Good work, slight delay on day 2'},{job:'Interior Cordova',stars:5,note:'Excellent all around'}]},
+    {name:'MidSouth Crews',stars:3.8,jobs:8,tier:1,reviews:[{job:'Deck Collierville',stars:4,note:'Solid work'},{job:'Exterior Bartlett',stars:3,note:'Had to touch up trim'}]},
+    {name:'CertaPro East',stars:4.7,jobs:18,tier:2,reviews:[{job:'Interior Memphis',stars:5,note:'Perfect'},{job:'Cabinet Midtown',stars:5,note:'Best cabinet work I have seen'}]},
+  ];
+  el.innerHTML=`<div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px">Crew ratings & reviews</div>`+
+  crews.map(c=>`<div class="crew-stars" style="flex-direction:column;align-items:flex-start;padding:12px;border-radius:9px;margin-bottom:8px">
+    <div style="display:flex;align-items:center;gap:10px;width:100%;margin-bottom:8px">
+      <div style="width:36px;height:36px;border-radius:50%;background:#1B3A6B;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:500;flex-shrink:0">${c.name.charAt(0)}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${c.name}</div>
+      <div style="font-size:11px;color:var(--color-text-secondary)">Tier ${c.tier} &nbsp;\u00b7&nbsp; ${c.jobs} jobs completed</div></div>
+      <div style="text-align:right"><div style="font-size:16px;color:#E87722">${'\u2605'.repeat(Math.floor(c.stars))}${'\u2606'.repeat(5-Math.floor(c.stars))}</div><div style="font-size:11px;color:var(--color-text-secondary)">${c.stars} avg</div></div>
+    </div>
+    ${c.reviews.slice(0,2).map(r=>`<div style="background:var(--color-background-primary);border-radius:6px;padding:8px 10px;width:100%;margin-bottom:5px;border:0.5px solid var(--color-border-tertiary)"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:11px;color:var(--color-text-secondary)">${r.job}</span><span style="color:#E87722;font-size:11px">${'\u2605'.repeat(r.stars)}</span></div><div style="font-size:11px;color:var(--color-text-primary)">${r.note}</div></div>`).join('')}
+  </div>`).join('');
+}
+
+function renderTiers(){
+  const el=document.getElementById('tierPanel');if(!el)return;
+  el.innerHTML=`<div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Membership tiers</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:14px;line-height:1.5">Crew membership gives subs access to the job board. Higher tiers unlock more simultaneous jobs. Star ratings unlock access to premium jobs.</div>
+  <div class="tier-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="tier-name">Tier 1 \u2014 Solo</div><div class="tier-price">$1,500 <span>/month</span></div></div><span class="tag tag-open">Entry</span></div>
+  <div class="tier-features">\u2022 1 active job at a time<br>\u2022 Access to all jobs you qualify for by star rating<br>\u2022 Events & training access<br>\u2022 In-app messaging</div></div>
+  <div class="tier-card featured"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="tier-name">Tier 2 \u2014 Growing crew</div><div class="tier-price">$2,000 <span>/month</span></div></div><span class="tag" style="background:#FDF0E0;color:#854F0B">Popular</span></div>
+  <div class="tier-features">\u2022 2 active jobs at a time<br>\u2022 Priority notification on new jobs<br>\u2022 Access to all jobs you qualify for<br>\u2022 Events, training & early access</div></div>
+  <div class="tier-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="tier-name">Tier 3 \u2014 Production crew</div><div class="tier-price">$2,500 <span>/month</span></div></div><span class="tag" style="background:#EDE8F5;color:#3C3489">Premium</span></div>
+  <div class="tier-features">\u2022 3 active jobs at a time<br>\u2022 Requires 4+ star average (earned through performance)<br>\u2022 First access to high-value jobs<br>\u2022 Dedicated PM contact</div></div>
+  <div style="background:var(--color-background-secondary);border-radius:8px;padding:12px;font-size:11px;color:var(--color-text-secondary);line-height:1.7;border:0.5px solid var(--color-border-tertiary)">
+    <strong style="color:var(--color-text-primary)">Star rating system</strong><br>
+    Stars are earned through customer reviews after each completed job. 4+ star average required for premium jobs. Ratings are shown to admin when awarding and visible to subs on their profile.
+  </div>`;
+}
+
+function renderEvents(){
+  const el=document.getElementById('evPanel');if(!el)return;
+  const isAdmin=VIEW==='admin';
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">Events & announcements</div>${isAdmin?`<button onclick="openM('mEvent')" style="background:#E87722;color:#fff;border:none;padding:5px 11px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:3px"><i class='ti ti-plus' aria-hidden='true'></i> Post</button>`:''}</div>`+
+  events.map(ev=>`<div class="evcard"><div class="evtop"><div class="evdate" style="background:${ev.type==='social'?'#E87722':'#1B3A6B'}"><div class="em">${ev.month}</div><div class="ed">${ev.day}</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${ev.title}<span class="evtag ${ev.type==='social'?'social':''}">${ev.type}</span></div><div style="font-size:11px;color:var(--color-text-secondary)">${ev.time?`<i class='ti ti-clock' style='font-size:10px' aria-hidden='true'></i> ${ev.time}  `:''}${ev.location?`<i class='ti ti-map-pin' style='font-size:10px' aria-hidden='true'></i> ${ev.location}`:''}</div></div></div>
+    <div class="evbody">${ev.desc}</div>
+    ${ev.rsvps?`<div class="evrsvp"><button class="rbtn ${ev.myRsvp==='going'?'going':''}" onclick="rsvp(${ev.id},'going')">${ev.myRsvp==='going'?'\u2713 Going':"I'll be there"}</button><button class="rbtn ${ev.myRsvp==='maybe'?'maybe-on':''}" onclick="rsvp(${ev.id},'maybe')">${ev.myRsvp==='maybe'?'\u2713 Maybe':'Maybe'}</button><span style="font-size:10px;color:var(--color-text-secondary)">${ev.rsvps.going} going \u00b7 ${ev.rsvps.maybe} maybe</span>${isAdmin?`<button onclick="delEv(${ev.id})" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--color-text-secondary);font-size:11px" aria-label="Delete"><i class='ti ti-trash' aria-hidden='true'></i></button>`:''}</div>`:`<div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:var(--color-text-secondary)">Sent to all crew</span>${isAdmin?`<button onclick="delEv(${ev.id})" style="background:none;border:none;cursor:pointer;color:var(--color-text-secondary);font-size:11px"><i class='ti ti-trash' aria-hidden='true'></i></button>`:''}</div>`}
+  </div>`).join('')||`<div style="text-align:center;padding:28px;color:var(--color-text-secondary);font-size:12px">No events yet</div>`;
+}
+
+function rsvp(id,s){const ev=events.find(e=>e.id===id);if(ev.myRsvp===s){ev.myRsvp=null;if(s==='going')ev.rsvps.going--;else ev.rsvps.maybe--;}else{if(ev.myRsvp==='going')ev.rsvps.going--;if(ev.myRsvp==='maybe')ev.rsvps.maybe--;ev.myRsvp=s;if(s==='going')ev.rsvps.going++;else ev.rsvps.maybe++;}renderEvents();toast(ev.myRsvp?`RSVP: ${ev.myRsvp}`:'RSVP removed');}
+function delEv(id){const i=events.findIndex(e=>e.id===id);if(i>-1)events.splice(i,1);renderEvents();}
+
+function renderNotifs(){
+  const el=document.getElementById('nfPanel');if(!el)return;
+  const list=VIEW==='admin'?aN:cN;
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">Notifications</div><button onclick="markRead()" style="background:none;border:none;font-size:11px;color:#E87722;cursor:pointer;font-weight:500">Mark all read</button></div>`+
+  list.map(n=>`<div class="nfitem"><div class="nficon" style="background:${n.ib}"><i class="ti ${n.icon}" style="color:${n.ic}" aria-hidden="true"></i></div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:1px">${n.title}</div><div style="font-size:11px;color:var(--color-text-secondary);line-height:1.4">${n.sub}</div><div style="font-size:10px;color:var(--color-text-secondary);margin-top:2px">${n.time}</div></div>${n.unread?`<div class="nfdot"></div>`:`<div style="width:7px"></div>`}</div>`).join('');
+}
+function markRead(){(VIEW==='admin'?aN:cN).forEach(n=>n.unread=false);buildNav();renderNotifs();}
+
+function renderRates(){
+  const el=document.getElementById('ratePanel');if(!el)return;
+  el.innerHTML=`<div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Rate settings</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:12px;line-height:1.5">These rates power the customer instant quote. Adjust to match your pricing.</div>
+  <div class="rgroup"><h4><i class="ti ti-sofa" style="color:#2a6b2a" aria-hidden="true"></i> Interior</h4>
+    ${rr('Walls','wallSqFt','/ sq ft')}${rr('Ceiling','ceilingSqFt','/ sq ft')}${rr('Door (\u00d72)','doorEach','each')}${rr('Window (\u00d72)','windowEach','each')}${rr('Baseboards','trimLf','/ lin ft')}${rr('Crown molding','crownLf','/ lin ft')}${rr('Chair rail','chairLf','/ lin ft')}${rr('Color change mult','colorMult','\u00d7')}${rr('Repairs add','repairsAdd','flat $')}${rr('Minimum job','minInt','$')}
+  </div>
+  <div class="rgroup"><h4><i class="ti ti-layout-board" style="color:#5B3A9B" aria-hidden="true"></i> Cabinets</h4>
+    ${rr('Per door or drawer','cabPerPiece','each')}${rr('Cabinet boxes (flat)','cabBoxFlat','flat $')}${rr('Minimum job','minCab','$')}
+  </div>
+  <div class="rgroup"><h4><i class="ti ti-cash" style="color:#E87722" aria-hidden="true"></i> Deposit</h4>${rr('Deposit %','depPct','0.30 = 30%')}</div>
+  <button onclick="saveRates()" style="width:100%;background:#E87722;color:#fff;border:none;padding:9px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;margin-top:4px">Save rates</button>`;
+}
+function rr(label,key,unit){return`<div class="rrow"><span class="rlabel">${label}</span><input class="rinput" type="number" step="0.01" id="rate_${key}" value="${RATES[key]}"><span class="runit">${unit}</span></div>`;}
+function saveRates(){Object.keys(RATES).forEach(k=>{const e=document.getElementById('rate_'+k);if(e)RATES[k]=parseFloat(e.value)||RATES[k];});toast('Rates saved!');}
+
+function renderRoadmap(){
+  const el=document.getElementById('rmPanel');if(!el)return;
+  const sections=[
+    {icon:'ti-shield-check',color:'#1B3A6B',title:'Admin \u2014 built',items:[
+      {s:'built',t:'Post jobs with fixed payout',d:'Admin sets sold price and crew payout separately. Margin stays private.'},
+      {s:'built',t:'Min star rating per job',d:'Tag premium jobs as 4+ or 4.5+ star \u2014 only qualifying crews see them.'},
+      {s:'built',t:'Work order, files, links',d:'Attach PDFs, work orders from DripJobs/PaintScout, CompanyCam links.'},
+      {s:'built',t:'Photo management',d:'Upload, set hero thumbnail, delete individual photos.'},
+      {s:'built',t:'Crew ratings & reviews',d:'Leave star reviews after job completion. Ratings visible on crew profiles.'},
+      {s:'built',t:'Events & announcements',d:'Post training days, social events, announcements to all crew.'},
+      {s:'built',t:'Membership tier settings',d:'Tier 1/2/3 defined. Job limits per tier enforced.'},
+      {s:'built',t:'Rate settings panel',d:'Admin can adjust all customer quote rates without touching code.'},
+    ]},
+    {icon:'ti-hard-hat',color:'#2a6b2a',title:'Crew \u2014 built',items:[
+      {s:'built',t:'Grab jobs (no bidding)',d:'First come first served. Crews grab available jobs instantly.'},
+      {s:'built',t:'Job limits by tier',d:'Tier 1: 1 job. Tier 2: 2 jobs. Tier 3: 3 jobs.'},
+      {s:'built',t:'Sign agreement on crew side',d:'Crew signs T&Cs after grabbing job. Admin never sees this step.'},
+      {s:'built',t:'Mark job complete',d:'Crew flags job done. Triggers admin review and payment process.'},
+      {s:'built',t:'Star rating gating',d:'Crews below min rating cannot see restricted jobs.'},
+      {s:'built',t:'Events & alerts \u2014 read only',d:'Crew sees events and notifications but cannot post or edit.'},
+    ]},
+    {icon:'ti-user',color:'#E87722',title:'Customer quote \u2014 built',items:[
+      {s:'built',t:'Middleton Painting branded',d:'No BrushPass branding on customer-facing quote. Middleton only.'},
+      {s:'built',t:'Interior & cabinet instant quote',d:'Per-room, per-surface, coat selection. Cabinet: $150/piece + boxes.'},
+      {s:'built',t:'Exterior routes to DripJobs',d:'Exterior taps through to middletonpainting.dripjobs.com.'},
+      {s:'built',t:'Photo upload & start date',d:'Customer uploads project photos. Start date min 3 days out.'},
+      {s:'built',t:'Disclaimer & sign + deposit',d:'Terms, signature, 30% deposit before booking confirmed.'},
+    ]},
+    {icon:'ti-rocket',color:'#5B3A9B',title:'Next to build',items:[
+      {s:'next',t:'Sub invoice generation',d:'Crew generates invoice from job. Admin reviews and approves payment.'},
+      {s:'next',t:'Payment via Stripe Connect',d:'Admin approves invoice \u2192 payout to crew via ACH or Stripe.'},
+      {s:'next',t:'CompanyCam API sync',d:'Paste project ID \u2192 photos sync automatically from CompanyCam.'},
+      {s:'next',t:'DripJobs / PaintScout import',d:'Pull sold jobs directly into BrushPass. Auto-populate job details.'},
+      {s:'next',t:'SMS / push notifications',d:'Notify crew when new job posts. Alert admin on grabs and completions.'},
+      {s:'idea',t:'Sherwin-Williams ad placement',d:'Targeted ads inside the app to active painting contractors. Real audience.'},
+      {s:'idea',t:'Equipment rental / referral',d:'Subs rent sprayers, trailers from each other or via referral links.'},
+      {s:'later',t:'Franchise / license model',d:'License the full operating system \u2014 software + playbook \u2014 to other markets.'},
+    ]},
+    {icon:'ti-map',color:'#854F0B',title:'Scale strategy',items:[
+      {s:'built',t:'Memphis \u2014 Phase 1',d:'Home market. Dial in the model, build the crew network, prove unit economics.'},
+      {s:'next',t:'Nashville / Oxford / Tupelo',d:'One sales+PM person per market. They post jobs, we vet subs, same system.'},
+      {s:'later',t:'150-mile expansion radius',d:'Hire estimator/PM in each city. Middleton Painting becomes a regional brand.'},
+      {s:'idea',t:'Middleton as sales/marketing co',d:'Transition to selling and subbing everything. No crews on payroll. Pure margin.'},
+    ]},
+  ];
+  const sMap={'built':'rm-built','next':'rm-next','later':'rm-later','idea':'rm-idea'};
+  const sLabel={'built':'Built','next':'Next','later':'Later','idea':'Idea'};
+  el.innerHTML=`<div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">BrushPass roadmap</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:14px;line-height:1.5">Current build status and what's coming next across all three sides of the platform.</div>`+
+  sections.map(sec=>`<div class="rm-section"><h4><i class="ti ${sec.icon}" style="color:${sec.color}" aria-hidden="true"></i>${sec.title}</h4>
+    <div class="rm-items">${sec.items.map(item=>`<div class="rm-item"><span class="rm-status ${sMap[item.s]}">${sLabel[item.s]}</span><div><div class="rm-title">${item.t}</div><div class="rm-desc">${item.d}</div></div></div>`).join('')}</div>
+  </div>`).join('');
+}
+
+function openReview(id){reviewJobId=id;reviewStars=0;document.getElementById('reviewJobTitle').textContent=jobs.find(x=>x.id===id).title;document.querySelectorAll('.star').forEach(s=>s.classList.remove('on'));document.getElementById('reviewNotes').value='';openM('mReview');}
+function setReviewStar(n){reviewStars=n;document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<n));}
+function submitReview(){
+  if(!reviewStars){toast('Please select a star rating');return;}
+  const j=jobs.find(x=>x.id===reviewJobId);
+  j.review={stars:reviewStars,notes:document.getElementById('reviewNotes').value||'No notes added.',date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})};
+  closeM('mReview');renderJobList();toast(`${reviewStars}-star review submitted for ${j.grabbedBy}`);
+}
+
+function trigPhoto(id){ACTIVE_JOB=id;document.getElementById('dpPhInp').click();}
+function handleDPPhotos(e,id){const files=Array.from(e.target.files);const j=jobs.find(x=>x.id===id);let n=0;files.forEach(f=>{const r=new FileReader();r.onload=ev=>{j.photos.push(ev.target.result);n++;if(n===files.length){renderJobList();toast('Photos added!');}};r.readAsDataURL(f);});}
+function delPhoto(id,idx){const j=jobs.find(x=>x.id===id);j.photos.splice(idx,1);renderJobList();toast('Photo removed');}
+function setHero(id,idx){const j=jobs.find(x=>x.id===id);const m=j.photos.splice(idx,1)[0];j.photos.unshift(m);renderJobList();}
+function handleWO(e,id){const f=e.target.files[0];if(!f)return;const j=jobs.find(x=>x.id===id);const size=f.size>1048576?(f.size/1048576).toFixed(1)+' MB':(Math.round(f.size/1024))+' KB';j.workOrder={name:f.name,size,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})};renderDP();toast('Work order uploaded!');}
+function removeWO(id){const j=jobs.find(x=>x.id===id);j.workOrder=null;renderDP();toast('Work order removed');}
+function handleFiles(e,id){const files=Array.from(e.target.files);const j=jobs.find(x=>x.id===id);files.forEach(f=>{const ext=f.name.split('.').pop().toLowerCase();const size=f.size>1048576?(f.size/1048576).toFixed(1)+' MB':(Math.round(f.size/1024))+' KB';j.files.push({name:f.name,type:ext,size,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});});renderDP();toast(`${files.length} file${files.length>1?'s':''} attached`);}
+function delFile(id,idx){const j=jobs.find(x=>x.id===id);j.files.splice(idx,1);renderDP();toast('File removed');}
+function addLink(id){const j=jobs.find(x=>x.id===id);const label=document.getElementById(`ll${id}`).value.trim();const url=document.getElementById(`lu${id}`).value.trim();if(!label||!url){toast('Enter label and URL');return;}const icon=url.includes('companycam')?'ti-camera':url.includes('hover')?'ti-3d-cube-sphere':url.includes('dripjobs')?'ti-file-dollar':'ti-link';j.links.push({label,url,icon});document.getElementById(`ll${id}`).value='';document.getElementById(`lu${id}`).value='';renderDP();toast('Link added');}
+function delLink(id,idx){const j=jobs.find(x=>x.id===id);j.links.splice(idx,1);renderDP();toast('Link removed');}
+
+let pjPhotos2=[];
+function handlePJPhotos(e){pjPhotos2=[];const g=document.getElementById('pjPhotoGrid');g.innerHTML='';Array.from(e.target.files).forEach(f=>{const r=new FileReader();r.onload=ev=>{pjPhotos2.push(ev.target.result);const img=document.createElement('img');img.src=ev.target.result;g.appendChild(img);};r.readAsDataURL(f);});}
+
+function submitJob(){
+  const title=document.getElementById('pjTitle').value.trim();const price=parseInt(document.getElementById('pjPrice').value);const payout=parseInt(document.getElementById('pjPayout').value);
+  if(!title||!price||!payout){toast('Title, sold price and payout required');return;}
+  const scope=document.getElementById('pjScope').value.trim();const minStars=parseFloat(document.getElementById('pjMinStars').value)||0;
+  const nj={id:Date.now(),title,customer:document.getElementById('pjCustomer').value||'Customer',neighborhood:document.getElementById('pjNeighborhood').value.trim()||'Memphis',type:document.getElementById('pjType').value,price,payout,start:new Date(document.getElementById('pjDate').value||Date.now()).toLocaleDateString('en-US',{month:'short',day:'numeric'}),status:'available',minStars,photos:[...pjPhotos2],workOrder:null,files:[],links:[],scope:scope?scope.split('\
+').filter(Boolean):['Scope TBD'],deposit:Math.round(price*.3),grabbedBy:null,accepted:false,completed:false,review:null};
+  jobs.unshift(nj);closeM('mPostJob');renderJobList();ACTIVE_JOB=nj.id;renderDP();toast('Job posted!');
+  ['pjTitle','pjPrice','pjPayout','pjScope','pjCustomer','pjNeighborhood'].forEach(id=>document.getElementById(id).value='');pjPhotos2=[];
+}
+
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+function openAgree(jid){
+  agreeJobId=jid;const j=jobs.find(x=>x.id===jid);
+  const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('agreeText').innerHTML=`<h4>BrushPass Subcontractor Job Agreement</h4><p><strong>Job:</strong> ${j.title}<br><strong>Location:</strong> ${j.neighborhood}, TN<br><strong>Start:</strong> ${j.start}<br><strong>Payout:</strong> $${j.payout.toLocaleString()}</p><p><strong>1. Scope.</strong> Complete all scope items as listed in the job posting.</p><p><strong>2. Payment.</strong> Paid within 15 days of customer sign-off following final walkthrough. BrushPass retains a placement fee.</p><p><strong>3. Non-solicitation.</strong> No direct contact with end customer for 24 months.</p><p><strong>4. Insurance.</strong> Min $1M general liability required.</p><p><strong>5. Quality standards.</strong> Work must meet BrushPass quality standards. Payment may be withheld pending resolution of documented issues.</p><p style="margin-bottom:0"><strong>Agreed:</strong> ${today}</p>`;
+  document.getElementById('aSigName').value='';document.getElementById('aSigCompany').value='';
+  openM('mAgree');aSigHasContent=false;aSigCtx=null;setTimeout(initASig,60);
+}
+function initASig(){
+  const c=document.getElementById('aSigCanvas');if(!c)return;
+  c.width=c.offsetWidth||390;c.height=100;
+  aSigCtx=c.getContext('2d');aSigCtx.strokeStyle='#2a6b2a';aSigCtx.lineWidth=2;aSigCtx.lineCap='round';aSigCtx.lineJoin='round';aSigHasContent=false;
+  const gp=e=>{const r=c.getBoundingClientRect();const src=e.touches?e.touches[0]:e;return{x:(src.clientX-r.left)*(c.width/r.width),y:(src.clientY-r.top)*(c.height/r.height)};};
+  c.onmousedown=e=>{e.preventDefault();aSigDrawing=true;const p=gp(e);aSigCtx.beginPath();aSigCtx.moveTo(p.x,p.y);};
+  c.onmousemove=e=>{e.preventDefault();if(!aSigDrawing)return;aSigHasContent=true;const p=gp(e);aSigCtx.lineTo(p.x,p.y);aSigCtx.stroke();};
+  c.onmouseup=c.onmouseleave=e=>{e.preventDefault();aSigDrawing=false;};
+  c.ontouchstart=e=>{e.preventDefault();aSigDrawing=true;const p=gp(e);aSigCtx.beginPath();aSigCtx.moveTo(p.x,p.y);};
+  c.ontouchmove=e=>{e.preventDefault();if(!aSigDrawing)return;aSigHasContent=true;const p=gp(e);aSigCtx.lineTo(p.x,p.y);aSigCtx.stroke();};
+  c.ontouchend=e=>{e.preventDefault();aSigDrawing=false;};
+}
+function clearASig(){if(!aSigCtx)return;aSigCtx.clearRect(0,0,document.getElementById('aSigCanvas').width,100);aSigHasContent=false;}
+function submitAgree(){
+  const name=document.getElementById('aSigName').value.trim();
+  if(!name){toast('Enter your full name');return;}
+  if(!aSigHasContent){toast('Please sign the agreement');return;}
+  const j=jobs.find(x=>x.id===agreeJobId);j.accepted=true;
+  closeM('mAgree');renderJobList();toast(`Agreement signed by ${name} \u2014 job confirmed!`);
+}
+
+function submitEvent(){
+  const title=document.getElementById('evTitle').value.trim();const desc=document.getElementById('evDesc').value.trim();
+  if(!title||!desc){toast('Title and description required');return;}
+  const d=document.getElementById('evDate').value?new Date(document.getElementById('evDate').value):new Date();
+  const month=d.toLocaleString('en-US',{month:'short'});const day=d.getDate();
+  const tv=document.getElementById('evTime').value;const ft=tv?new Date('1970-01-01T'+tv).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'';
+  const type=document.getElementById('evType').value;
+  events.unshift({id:Date.now(),title,month,day:String(day),time:ft,location:document.getElementById('evLoc').value.trim(),type,desc,rsvps:type!=='announcement'?{going:0,maybe:0}:null,myRsvp:null});
+  closeM('mEvent');renderEvents();['evTitle','evDate','evTime','evLoc','evDesc'].forEach(id=>document.getElementById(id).value='');toast('Event posted!');
+}
+
+// \u2500\u2500 CUSTOMER QUOTE (Middleton Painting branded) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function mkRoom(){return{roomType:'Bedroom',l:'',w:'',h:'8',surfaces:{walls:{on:true,coats:1},ceiling:{on:false,coats:1},doors:{on:false,coats:1},windows:{on:false,coats:1},trim:{on:false,coats:1},crown:{on:false,coats:1},chair:{on:false,coats:1}},colorChange:'no',repairs:'no'};}
+
+function initCQ(){
+  cqS={step:0,type:null,rooms:[mkRoom()],cabDoors:'',cabDrawers:'',cabColorChange:'no',name:'',email:'',phone:'',addr:'',city:'',zip:'',startDate:'',notes:'',quote:null,termsOk:false};
+  cqPhotos=[];cqSigHasContent=false;cqSigCtx=null;cqRender();
+}
+function cqRender(){const el=document.getElementById('cqRoot');if(el)el.innerHTML=cqBuild();}
+function cqSBar(a){const steps=['Type','Details','Contact','Quote','Book'];return`<div class="sbar">${steps.map((s,i)=>`<div class="sdot ${i<a?'done':i===a?'act':''}">${i<a?'\u2713 ':''}${s}</div>`).join('')}</div>`;}
+
+function cqBuild(){
+  const s=cqS;
+  if(s.step===0)return cqType();
+  if(s.step==='ext')return cqExt();
+  if(s.step===1)return s.type==='interior'?cqInt():cqCab();
+  if(s.step===2)return cqContact();
+  if(s.step===3)return cqQuote();
+  if(s.step===4)return cqBook();
+  if(s.step===5)return cqSuccess();
+  return '';
+}
+
+function cqType(){return cqSBar(0)+`
+  <div style="text-align:center;margin-bottom:14px"><div style="font-size:18px;font-weight:500;color:#1B3A6B;margin-bottom:2px">Middleton Painting</div><div style="font-size:12px;color:var(--color-text-secondary)">Instant Quote Tool &nbsp;\u00b7&nbsp; Memphis, TN</div></div>
+  <div class="sh">What would you like painted?</div>
+  <div class="ss">Get an instant estimate in under 2 minutes. No account needed.</div>
+  <div class="tgrid">
+    <div class="tc${cqS.type==='interior'?' sel':''}" onclick="cqS.type='interior';cqRender()"><i class="ti ti-sofa" aria-hidden="true"></i><div class="tl">Interior</div><div class="ts">Rooms & walls</div></div>
+    <div class="tc${cqS.type==='cabinet'?' sel':''}" onclick="cqS.type='cabinet';cqRender()"><i class="ti ti-layout-board" aria-hidden="true"></i><div class="tl">Cabinets</div><div class="ts">Kitchen, bath, laundry</div></div>
+    <div class="tc" onclick="cqS.step='ext';cqRender()" style="grid-column:1/-1;display:flex;align-items:center;gap:11px;text-align:left;padding:12px 14px"><i class="ti ti-home" style="font-size:24px;flex-shrink:0" aria-hidden="true"></i><div><div class="tl">Exterior</div><div class="ts">Tap to request a custom quote from our team</div></div><i class="ti ti-arrow-right" style="margin-left:auto;color:var(--color-text-secondary)" aria-hidden="true"></i></div>
+  </div>
+  <button class="cbtn navy" onclick="cqS.step=1;cqRender()" ${!cqS.type?'disabled':''}>Continue <i class="ti ti-arrow-right" aria-hidden="true"></i></button>`;}
+
+function cqExt(){return`
+  <button class="bk" onclick="cqS.step=0;cqRender()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+  <div class="ext-card"><i class="ti ti-home" aria-hidden="true"></i><h3>Exterior quotes need a professional eye</h3><p>Exterior pricing depends on your home's size, condition, story count, and trim detail. Our estimators are fast and the visit is free.</p>
+  <a href="https://middletonpainting.dripjobs.com" target="_blank"><i class="ti ti-external-link" aria-hidden="true"></i> Request a free exterior quote</a>
+  <div class="ext-or">\u2014 or call / text \u2014</div><div class="ext-phone">(901) 555-0180</div><div style="color:rgba(255,255,255,0.5);font-size:10px;margin-top:3px">Middleton Painting \u00b7 Memphis, TN \u00b7 Same-day response</div></div>
+  <button class="cbtn ghost" onclick="cqS.step=0;cqRender()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back to options</button>`;}
+
+function cqInt(){
+  const surfs=[['walls','ti-layout-sidebar','Walls'],['ceiling','ti-layout-rows','Ceiling'],['doors','ti-door','Doors'],['windows','ti-window','Windows'],['trim','ti-separator','Baseboards'],['crown','ti-crown','Crown molding'],['chair','ti-line-height','Chair rail']];
+  return cqSBar(1)+`
+  <button class="bk" onclick="cqS.step=0;cqRender()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+  <div class="sh">Interior details</div><div class="ss">Describe each room. Tap a surface to select, then choose 1 or 2 coats.</div>
+  <div class="fg"><label class="fl">How many rooms?</label>
+    <div class="rctr"><button class="rcbtn" onclick="cqChgRooms(-1)">\u2212</button><span style="font-size:15px;font-weight:500;min-width:20px;text-align:center;color:var(--color-text-primary)">${cqS.rooms.length}</span><button class="rcbtn" onclick="cqChgRooms(1)">+</button><span style="font-size:11px;color:var(--color-text-secondary);margin-left:6px">room${cqS.rooms.length!==1?'s':''}</span></div>
+  </div>
+  ${cqS.rooms.map((r,ri)=>`<div class="rblk">
+    <div class="rblkh"><span style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Room ${ri+1}</span>
+      <select onchange="cqS.rooms[${ri}].roomType=this.value" style="font-size:10px;padding:3px 5px;border-radius:4px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)">
+        ${['Bedroom','Living room','Dining room','Kitchen','Bathroom','Office','Hallway','Other'].map(rt=>`<option${r.roomType===rt?' selected':''}>${rt}</option>`).join('')}
+      </select>
+    </div>
+    <div class="fg"><label class="fl">Dimensions <span class="fl-sub">approximate is fine</span></label>
+      <div class="d3"><div><input type="number" placeholder="Length" value="${r.l}" oninput="cqS.rooms[${ri}].l=this.value"><div class="dlbl">Length ft</div></div><div><input type="number" placeholder="Width" value="${r.w}" oninput="cqS.rooms[${ri}].w=this.value"><div class="dlbl">Width ft</div></div><div><input type="number" placeholder="8" value="${r.h}" oninput="cqS.rooms[${ri}].h=this.value"><div class="dlbl">Ceiling ht</div></div></div>
+    </div>
+    <div class="fg"><label class="fl">Surfaces <span class="fl-sub">tap to select \u00b7 choose coats</span></label>
+      <div class="sgrid">${surfs.map(([key,icon,lbl])=>`<div class="sitem${r.surfaces[key].on?' on':''}" onclick="cqTogSurf(${ri},'${key}')"><div class="stop"><i class="ti ${icon}" aria-hidden="true"></i><span class="slbl">${lbl}</span></div>${r.surfaces[key].on?`<div class="ccoat"><div class="copt${r.surfaces[key].coats===1?' c1':''}" onclick="event.stopPropagation();cqSetCoats(${ri},'${key}',1)">1 coat</div><div class="copt${r.surfaces[key].coats===2?' c2':''}" onclick="event.stopPropagation();cqSetCoats(${ri},'${key}',2)">2 coats</div></div>`:''}</div>`).join('')}</div>
+    </div>
+    <div class="fg"><label class="fl">Color change?</label>
+      <div class="tog2"><div class="tg${r.colorChange==='no'?' sel':''}" onclick="cqS.rooms[${ri}].colorChange='no';cqRender()">Same / similar color</div><div class="tg${r.colorChange==='yes'?' sel-o':''}" onclick="cqS.rooms[${ri}].colorChange='yes';cqRender()">New / different color</div></div>
+    </div>
+    <div class="fg" style="margin-bottom:0"><label class="fl">Repairs needed?</label>
+      <div class="tog2"><div class="tg${r.repairs==='no'?' sel':''}" onclick="cqS.rooms[${ri}].repairs='no';cqRender()">No repairs needed</div><div class="tg${r.repairs==='yes'?' sel-o':''}" onclick="cqS.rooms[${ri}].repairs='yes';cqRender()">Yes, some patching</div></div>
+    </div>
+  </div>`).join('')}
+  <button class="cbtn navy" onclick="cqS.step=2;cqRender()">Continue <i class="ti ti-arrow-right" aria-hidden="true"></i></button>`;}
+
+function cqCab(){return cqSBar(1)+`
+  <button class="bk" onclick="cqS.step=0;cqRender()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+  <div class="sh">Cabinet details</div><div class="ss">Tell us about your cabinet project.</div>
+  <div class="cab-info"><div class="ci-title"><i class="ti ti-info-circle" aria-hidden="true"></i> Factory sprayed finish</div><div class="ci-body">All cabinet painting uses a professional factory sprayed finish \u2014 no brush marks, no roller texture. Cabinet boxes always included. We apply 3 coats for a durable, furniture-grade result.</div></div>
+  <div class="fg"><label class="fl">Number of cabinet doors</label><input type="number" class="fi" placeholder="e.g. 22" value="${cqS.cabDoors}" oninput="cqS.cabDoors=this.value"></div>
+  <div class="fg"><label class="fl">Number of drawer fronts</label><input type="number" class="fi" placeholder="e.g. 8" value="${cqS.cabDrawers}" oninput="cqS.cabDrawers=this.value"></div>
+  <div class="fg"><label class="fl">Color change?</label>
+    <div class="tog2"><div class="tg${cqS.cabColorChange==='no'?' sel':''}" onclick="cqS.cabColorChange='no';cqRender()">Same / refresh color</div><div class="tg${cqS.cabColorChange==='yes'?' sel-o':''}" onclick="cqS.cabColorChange='yes';cqRender()">New / different color</div></div>
+  </div>
+  <div class="note2"><i class="ti ti-receipt" aria-hidden="true" style="margin-right:4px"></i>Pricing is <strong>$${RATES.cabPerPiece} per door and per drawer front</strong>, plus cabinet boxes ($${RATES.cabBoxFlat} flat). Minimum project: $${RATES.minCab.toLocaleString()}.</div>
+  <button class="cbtn navy" onclick="cqS.step=2;cqRender()">Continue <i class="ti ti-arrow-right" aria-hidden="true"></i></button>`;}
+
+function cqContact(){
+  const minDate=new Date();minDate.setDate(minDate.getDate()+3);const minStr=minDate.toISOString().split('T')[0];
+  return cqSBar(2)+`
+  <button class="bk" onclick="cqS.step=1;cqRender()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+  <div class="sh">Your info</div><div class="ss">We'll email your quote and have a project manager reach out within 24 hours.</div>
+  <div class="fg"><label class="fl">Full name</label><input type="text" class="fi" placeholder="Jane Smith" value="${cqS.name}" oninput="cqS.name=this.value"></div>
+  <div class="fg"><label class="fl">Email</label><input type="email" class="fi" placeholder="jane@email.com" value="${cqS.email}" oninput="cqS.email=this.value"></div>
+  <div class="fg"><label class="fl">Phone</label><input type="tel" class="fi" placeholder="(901) 555-0100" value="${cqS.phone}" oninput="cqS.phone=this.value"></div>
+  <div class="fg"><label class="fl">Property address</label>
+    <input type="text" class="fi" placeholder="Street address" value="${cqS.addr}" oninput="cqS.addr=this.value" style="margin-bottom:5px">
+    <div style="display:grid;grid-template-columns:1fr 75px;gap:5px"><input type="text" class="fi" placeholder="City" value="${cqS.city}" oninput="cqS.city=this.value"><input type="text" class="fi" placeholder="ZIP" value="${cqS.zip}" oninput="cqS.zip=this.value"></div>
+  </div>
+  <div class="fg"><label class="fl">Requested start date <span class="fl-sub">optional</span></label>
+    <input type="date" class="fi" min="${minStr}" value="${cqS.startDate}" oninput="cqS.startDate=this.value">
+    <div class="sdnote"><i class="ti ti-info-circle" style="font-size:9px" aria-hidden="true"></i> Requested date only \u2014 not confirmed until your project manager reaches out. Earliest available is 3 days from today.</div>
+  </div>
+  <div class="fg"><label class="fl">Project photos <span class="fl-sub">optional but helpful</span></label>
+    <div class="phup" onclick="document.getElementById('cqPhInp').click()"><i class="ti ti-camera" aria-hidden="true"></i>Upload photos of the space<div style="font-size:10px;margin-top:2px">Helps us give the most accurate estimate</div></div>
+    <input type="file" id="cqPhInp" accept="image/*" multiple style="display:none" onchange="handleCQPhotos(event)">
+    <div class="phgrid" id="cqPhGrid">${cqPhotos.map((p,i)=>`<div class="phitem"><img src="${p}" alt="Photo ${i+1}"><button class="phdel" onclick="removeCQPhoto(${i})">\u2715</button></div>`).join('')}</div>
+  </div>
+  <div class="fg"><label class="fl">Notes <span class="fl-sub">optional</span></label><textarea class="fi" style="height:60px;resize:none" placeholder="Anything else we should know..." oninput="cqS.notes=this.value">${cqS.notes}</textarea></div>
+  <button class="cbtn navy" onclick="cqCalc()">Get my instant quote <i class="ti ti-arrow-right" aria-hidden="true"></i></button>`;}
+
+function cqQuote(){
+  const q=cqS.quote;
+  if(q.cant)return`
+    <button class="bk" onclick="cqS.step=2;cqRender()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="cant"><i class="ti ti-phone-call" aria-hidden="true"></i><h3>This one needs a custom quote</h3><p>Your project has details we need to see in person. Our estimators are fast and the visit is free \u2014 usually same day.</p>
+    <a href="https://middletonpainting.dripjobs.com" target="_blank"><i class="ti ti-external-link" aria-hidden="true"></i> Request a free quote online</a>
+    <div class="or">\u2014 or call / text \u2014</div><div class="ph">(901) 555-0180</div><div style="color:rgba(255,255,255,0.5);font-size:10px;margin-top:3px">Middleton Painting \u00b7 Memphis, TN</div></div>
+    <button class="cbtn ghost" onclick="initCQ()">Start over</button>`;
+  return cqSBar(3)+`
+    <button class="bk" onclick="cqS.step=2;cqRender()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div style="text-align:center;margin-bottom:11px"><div style="font-size:13px;font-weight:500;color:#1B3A6B">Middleton Painting</div><div style="font-size:11px;color:var(--color-text-secondary)">Instant quote result</div></div>
+    <div class="qbox"><div style="font-size:11px;opacity:.75;margin-bottom:2px">Estimated project cost</div><div class="qprice">$${q.total.toLocaleString()}</div><div class="qrange">Range: $${q.low.toLocaleString()} \u2013 $${q.high.toLocaleString()}</div><div class="qsub">Quote emailed to ${cqS.email} \u00b7 Valid 7 days</div></div>
+    <div class="qbrk">${q.bd.map(r=>`<div class="qbrow"><span class="qk">${r.l}</span><span>${r.v}</span></div>`).join('')}</div>
+    <div class="disc"><i class="ti ti-alert-triangle" aria-hidden="true"></i><div><strong>Important:</strong> This instant quote is based on the information you provided. If the actual project scope, condition, or dimensions differ, pricing may need to be adjusted. Your project manager will review everything with you before work begins.</div></div>
+    <button class="cbtn orange" onclick="cqS.step=4;cqRender()"><i class="ti ti-calendar-check" aria-hidden="true"></i> Book it \u2014 pay $${q.dep.toLocaleString()} deposit</button>
+    <button class="cbtn ghost" style="margin-top:5px" onclick="toast('Quote emailed to '+cqS.email)">Email this quote \u2014 I\'ll book later</button>`;}
+
+function cqBook(){
+  const q=cqS.quote;const sd=cqS.startDate?new Date(cqS.startDate+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'}):'Not requested';
+  return cqSBar(4)+`
+    <button class="bk" onclick="cqS.step=3;cqRender()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="sh">Review, sign & pay</div><div class="ss">Read the terms, sign, and pay your deposit to lock in your spot.</div>
+    <div class="depbox">
+      <div class="deprow"><span class="dk">Project estimate</span><span class="dv">$${q.total.toLocaleString()}</span></div>
+      <div class="deprow"><span class="dk">Deposit today (30%)</span><span class="dvo">$${q.dep.toLocaleString()}</span></div>
+      <div class="deprow"><span class="dk">Balance at completion</span><span class="dv">$${(q.total-q.dep).toLocaleString()}</span></div>
+      <div class="deprow" style="margin-bottom:0"><span class="dk">Requested start</span><span class="dv">${sd}</span></div>
+    </div>
+    <div class="disc" style="margin-bottom:11px"><i class="ti ti-alert-triangle" aria-hidden="true"></i><div>By paying this deposit you acknowledge this quote is based on information you provided. If the actual project differs, pricing may be adjusted. Your project manager will confirm all details before work begins.</div></div>
+    <div class="fg"><label class="fl">Terms & conditions</label>
+      <div class="tbox"><h4>Middleton Painting \u2014 Service Agreement</h4>
+        <p><strong>1. Instant Quote.</strong> This estimate was generated based on information entered online. Final price subject to adjustment following on-site review.</p>
+        <p><strong>2. Deposit.</strong> Non-refundable 30% deposit required to schedule. Applied to final invoice.</p>
+        <p><strong>3. Start Date.</strong> Selected date is requested, not guaranteed. PM confirms within 24 hours.</p>
+        <p><strong>4. Scope.</strong> Work as described. Additions priced separately.</p>
+        <p><strong>5. Payment.</strong> Balance due upon completion. Check, credit card, or ACH accepted.</p>
+        <p><strong>6. Warranty.</strong> Labor warranted 2 years from completion.</p>
+        <p style="margin-bottom:0"><strong>Full agreement provided by your project manager prior to start.</strong></p>
+      </div>
+      <label class="cbrow"><input type="checkbox" id="tcCheck" onchange="cqS.termsOk=this.checked"><span>I have read and agree to the terms. I understand this is an estimate based on information I provided.</span></label>
+    </div>
+    <div class="fg"><label class="fl">Your signature</label>
+      <div class="sig-row"><span style="font-size:10px;color:var(--color-text-secondary)">Sign with finger or mouse</span><button class="sig-clr" onclick="clearCQSig()"><i class="ti ti-refresh" aria-hidden="true"></i> Clear</button></div>
+      <canvas class="sig-cv" id="cqSigCanvas" width="430" height="100"></canvas>
+    </div>
+    <div class="fg"><label class="fl">Card number</label>
+      <div class="card-num"><input type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this)"></div>
+      <div class="card3"><input type="text" placeholder="MM / YY" maxlength="7"><input type="text" placeholder="CVV" maxlength="4"><input type="text" placeholder="ZIP"></div>
+    </div>
+    <div class="note2"><i class="ti ti-lock" aria-hidden="true" style="margin-right:3px"></i>Secured by Stripe. Card info never stored on our servers.</div>
+    <button class="cbtn orange" onclick="cqPay()"><i class="ti ti-lock" aria-hidden="true"></i> Sign & pay $${q.dep.toLocaleString()} deposit</button>
+    <div id="cqSigTrigger"></div>`;}
+
+function cqSuccess(){
+  const q=cqS.quote;const sd=cqS.startDate?new Date(cqS.startDate+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'}):'To be confirmed by your PM';
+  return`<div class="succ"><i class="ti ti-circle-check" aria-hidden="true"></i><h2>You're booked!</h2>
+    <p>Deposit of <strong>$${q.dep.toLocaleString()}</strong> received and your agreement is signed.</p>
+    <p style="color:var(--color-text-secondary)">A Middleton Painting project manager will reach out within 24 hours to confirm your start date and walk through next steps.</p>
+    <div class="pmban"><i class="ti ti-user-check" style="font-size:14px;flex-shrink:0;margin-top:1px;color:#2a6b2a" aria-hidden="true"></i><div><strong style="color:#27500A">What happens next</strong><br><span style="font-size:11px;color:#3B6D11;line-height:1.7">Your PM will call to confirm the start date, review the scope in person, and answer any questions.</span></div></div>
+    <div class="psum"><div class="ph">Project summary</div><div class="pb">
+      <div>${cqS.type==='cabinet'?'Cabinet':'Interior'} painting \u00b7 ${cqS.addr||cqS.city||'Your property'}</div>
+      <div>Estimate: $${q.total.toLocaleString()} \u00b7 Deposit paid: $${q.dep.toLocaleString()}</div>
+      <div>Requested start: ${sd}</div>
+      <div>Confirmation sent to: ${cqS.email}</div>
+    </div></div>
+    <button class="cbtn ghost" style="margin-top:13px" onclick="initCQ()">Get another quote</button></div>`;}
+
+function handleCQPhotos(e){const files=Array.from(e.target.files);let n=0;files.forEach(f=>{const r=new FileReader();r.onload=ev=>{cqPhotos.push(ev.target.result);n++;if(n===files.length){const g=document.getElementById('cqPhGrid');if(g)g.innerHTML=cqPhotos.map((p,i)=>`<div class="phitem"><img src="${p}" alt="Photo ${i+1}"><button class="phdel" onclick="removeCQPhoto(${i})">\u2715</button></div>`).join('');}};r.readAsDataURL(f);});}
+function removeCQPhoto(i){cqPhotos.splice(i,1);const g=document.getElementById('cqPhGrid');if(g)g.innerHTML=cqPhotos.map((p,i)=>`<div class="phitem"><img src="${p}" alt="Photo ${i+1}"><button class="phdel" onclick="removeCQPhoto(${i})">\u2715</button></div>`).join('');}
+function cqChgRooms(d){const n=Math.max(1,Math.min(8,cqS.rooms.length+d));while(cqS.rooms.length<n)cqS.rooms.push(mkRoom());while(cqS.rooms.length>n)cqS.rooms.pop();cqRender();}
+function cqTogSurf(ri,key){cqS.rooms[ri].surfaces[key].on=!cqS.rooms[ri].surfaces[key].on;cqRender();}
+function cqSetCoats(ri,key,n){cqS.rooms[ri].surfaces[key].coats=n;cqRender();}
+
+function cqCalc(){
+  if(!cqS.name||!cqS.email){toast('Please fill in your name and email');return;}
+  let total=0;const bd=[];let cant=false;
+  if(cqS.type==='interior'){
+    cqS.rooms.forEach((r,i)=>{
+      const l=parseFloat(r.l)||0,w=parseFloat(r.w)||0,h=parseFloat(r.h)||8;
+      if(!l||!w){cant=true;return;}
+      const p2=2*(l+w);let rt=0;const sf=r.surfaces;
+      if(sf.walls.on)rt+=p2*h*RATES.wallSqFt*(sf.walls.coats===2?1.6:1);
+      if(sf.ceiling.on)rt+=l*w*RATES.ceilingSqFt*(sf.ceiling.coats===2?1.6:1);
+      if(sf.doors.on)rt+=RATES.doorEach*2*(sf.doors.coats===2?1.5:1);
+      if(sf.windows.on)rt+=RATES.windowEach*2*(sf.windows.coats===2?1.4:1);
+      if(sf.trim.on)rt+=p2*RATES.trimLf*(sf.trim.coats===2?1.5:1);
+      if(sf.crown.on)rt+=p2*RATES.crownLf*(sf.crown.coats===2?1.5:1);
+      if(sf.chair.on)rt+=p2*RATES.chairLf*(sf.chair.coats===2?1.5:1);
+      if(r.colorChange==='yes')rt*=RATES.colorMult;if(r.repairs==='yes')rt+=RATES.repairsAdd;
+      total+=rt;bd.push({l:`${r.roomType} ${i+1} (${l}\u00d7${w}\u00d7${h})`,v:`$${Math.round(rt).toLocaleString()}`});
+    });
+    if(total<RATES.minInt&&!cant)total=RATES.minInt;
+  } else {
+    const doors=parseInt(cqS.cabDoors)||0,drawers=parseInt(cqS.cabDrawers)||0,pieces=doors+drawers;
+    if(!pieces){cant=true;}
+    else{
+      let cab=(pieces*RATES.cabPerPiece)+RATES.cabBoxFlat;
+      if(cqS.cabColorChange==='yes')cab*=1.08;
+      total=Math.max(cab,RATES.minCab);
+      bd.push({l:`${pieces} piece${pieces!==1?'s':''} \u00d7 $${RATES.cabPerPiece}`,v:`$${Math.round(pieces*RATES.cabPerPiece).toLocaleString()}`});
+      bd.push({l:'Cabinet boxes (always included)',v:`$${RATES.cabBoxFlat}`});
+      if(cqS.cabColorChange==='yes')bd.push({l:'Color change (8%)',v:''});
+      if(total===RATES.minCab)bd.push({l:'$2,500 minimum applied',v:''});
+    }
+  }
+  if(cant){cqS.quote={cant:true};cqS.step=3;cqRender();return;}
+  const rounded=Math.round(total/50)*50;bd.push({l:'Estimated total',v:`$${rounded.toLocaleString()}`});
+  cqS.quote={cant:false,total:rounded,low:Math.round(rounded*0.93/50)*50,high:Math.round(rounded*1.08/50)*50,dep:Math.round(rounded*RATES.depPct),bd};
+  cqS.step=3;cqRender();
+}
+
+function initCQSig(){
+  const c=document.getElementById('cqSigCanvas');if(!c||cqSigCtx)return;
+  c.width=c.offsetWidth||430;c.height=100;
+  cqSigCtx=c.getContext('2d');cqSigCtx.strokeStyle='#1B3A6B';cqSigCtx.lineWidth=2;cqSigCtx.lineCap='round';cqSigCtx.lineJoin='round';cqSigHasContent=false;
+  const gp=e=>{const r=c.getBoundingClientRect();const src=e.touches?e.touches[0]:e;return{x:(src.clientX-r.left)*(c.width/r.width),y:(src.clientY-r.top)*(c.height/r.height)};};
+  c.onmousedown=e=>{e.preventDefault();cqSigDrawing=true;const p=gp(e);cqSigCtx.beginPath();cqSigCtx.moveTo(p.x,p.y);};
+  c.onmousemove=e=>{e.preventDefault();if(!cqSigDrawing)return;cqSigHasContent=true;const p=gp(e);cqSigCtx.lineTo(p.x,p.y);cqSigCtx.stroke();};
+  c.onmouseup=c.onmouseleave=e=>{e.preventDefault();cqSigDrawing=false;};
+  c.ontouchstart=e=>{e.preventDefault();cqSigDrawing=true;const p=gp(e);cqSigCtx.beginPath();cqSigCtx.moveTo(p.x,p.y);};
+  c.ontouchmove=e=>{e.preventDefault();if(!cqSigDrawing)return;cqSigHasContent=true;const p=gp(e);cqSigCtx.lineTo(p.x,p.y);cqSigCtx.stroke();};
+  c.ontouchend=e=>{e.preventDefault();cqSigDrawing=false;};
+}
+function clearCQSig(){if(!cqSigCtx)return;cqSigCtx.clearRect(0,0,document.getElementById('cqSigCanvas').width,100);cqSigHasContent=false;}
+function cqPay(){
+  if(!cqS.termsOk){toast('Please agree to the terms first');return;}
+  if(!cqSigHasContent){toast('Please sign the agreement');return;}
+  toast('Processing payment...');setTimeout(()=>{cqS.step=5;cqRender();},1200);
+}
+function fmtCard(el){let v=el.value.replace(/\D/g,'').substring(0,16);el.value=v.replace(/(.{4})/g,'$1 ').trim();}
+function toast(msg){const t=document.getElementById('toastEl');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+const sigObs=new MutationObserver(()=>{if(document.getElementById('cqSigCanvas')&&!cqSigCtx)setTimeout(initCQSig,50);});
+sigObs.observe(document.getElementById('shell'),{childList:true,subtree:true});
+
+switchView('admin');
+</script>
+
+</body>
+</html>
